@@ -2,7 +2,6 @@ package com.voidStudios.photoDisplay;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Date;
 import java.util.Scanner;
 import com.voidStudios.photoDisplay.threads.DateThread;
 import com.voidStudios.photoDisplay.threads.PhotoThread;
