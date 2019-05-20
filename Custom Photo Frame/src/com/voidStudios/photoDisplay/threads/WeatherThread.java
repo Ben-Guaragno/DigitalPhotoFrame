@@ -52,6 +52,7 @@ public class WeatherThread extends Thread{
 						if(daily.days()<0) {
 							//Forecast Error
 							weatherDay=null;
+							System.out.println(new Date()+ ": Error in daily forecast");
 						}
 						else {
 							for(int j=0;j<3;j++) {
@@ -72,6 +73,7 @@ public class WeatherThread extends Thread{
 						if(hourly.hours()<0) {
 							//Forecast Error
 							weatherHour=null;
+							System.out.println(new Date()+ ": Error in hourly forecast");
 						}
 						else {
 							for(int j=0;j<12;j++) {
@@ -108,6 +110,8 @@ public class WeatherThread extends Thread{
 							s=content.substring(start);
 							int end=s.indexOf('"')-1;
 							s=s.substring(0, end);
+						}else{
+							System.out.println(new Date()+ ": Summary not contained in custom forecast fetch");
 						}
 					} catch (IOException e) {
 						System.out.println(new Date()+ ": Cobbled together stuff broke... Suprise!");
@@ -115,6 +119,8 @@ public class WeatherThread extends Thread{
 					}
 					weatherSummary=s;
 					data.setWeather(weatherDay,weatherHour,weatherSummary);
+				}else {
+					System.out.println(new Date()+ ": Pause file in effect");
 				}
 			}
 			else {

@@ -59,6 +59,12 @@ public class DataController {
 		if(this.weatherHour!=null && this.weatherHour.equals(weatherHour)) {
 			System.out.println(new Date()+ ": New hourly weather identical to old");
 		}
+		if(weatherDay==null)
+			System.out.println(new Date()+ ": New daily weather is null");
+		if(weatherHour==null)
+			System.out.println(new Date()+ ": New hourly weather is null");
+		if(weatherSummary==null || weatherSummary.length()==0)
+			System.out.println(new Date()+ ": New weather summary is null");
 		this.weatherDay=weatherDay;
 		this.weatherHour=weatherHour;
 		this.weatherSummary=weatherSummary;

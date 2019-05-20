@@ -61,7 +61,7 @@ public class View extends JFrame {
         getContentPane().setCursor(blankCursor);
 	}
 	
-	private void drawScreen(Graphics2D g) {
+	private synchronized void drawScreen(Graphics2D g) {
 		//draw all that shit
 		Rectangle rect=getBounds();
 		
