@@ -26,36 +26,36 @@ public class DataController {
 		icons=iconLoader.getIcons();
 	}
 	
-	public void requestUpdate() {
+	public synchronized void requestUpdate() {
 		if(!imageDirectory.isPaused)
 			view.repaint();
 	}
 	//Sets View pointer after DataController has been created
-	public void updateView(View view) {
+	public synchronized void updateView(View view) {
 		this.view=view;
 	}
 	
-	public String getDate() {
+	public synchronized String getDate() {
 		return date;
 	}
-	public String getDay() {
+	public synchronized String getDay() {
 		return day;
 	}
-	public void setDate(String date, String day) {
+	public synchronized void setDate(String date, String day) {
 		this.date=date;
 		this.day=day;
 		requestUpdate();
 	}
-	public void nextFile() {
+	public synchronized void nextFile() {
 		if(imageDirectory.isPaused)
 			return;
 		file=imageDirectory.nextFile();
 		requestUpdate();
 	}
-	public File getFile() {
+	public synchronized File getFile() {
 		return file;
 	}
-	public void setWeather(ArrayList<Hashtable<String,String>> weatherDay,ArrayList<Hashtable<String,String>> weatherHour,String weatherSummary) {
+	public synchronized void setWeather(ArrayList<Hashtable<String,String>> weatherDay,ArrayList<Hashtable<String,String>> weatherHour,String weatherSummary) {
 		if(this.weatherHour!=null && this.weatherHour.equals(weatherHour)) {
 			System.out.println(new Date()+ ": New hourly weather identical to old");
 		}
@@ -71,7 +71,7 @@ public class DataController {
 		modWeather(true);
 		requestUpdate();
 	}
-	private void modWeather(boolean degree) {
+	private synchronized void modWeather(boolean degree) {
 		if(weatherDay!=null) {
 			for(Hashtable<String,String> h:weatherDay) {
 				String max=h.get("apparentTemperatureHigh");
@@ -107,22 +107,22 @@ public class DataController {
 			}
 		}
 	}
-	public ArrayList<Hashtable<String,String>> getWeatherDay() {
+	public synchronized ArrayList<Hashtable<String,String>> getWeatherDay() {
 		return weatherDay;
 	}
-	public ArrayList<Hashtable<String,String>> getWeatherHour() {
+	public synchronized ArrayList<Hashtable<String,String>> getWeatherHour() {
 		return weatherHour;
 	}
-	public String getWeatherSummary() {
+	public synchronized String getWeatherSummary() {
 		return weatherSummary;
 	}
-	public HashMap<String,File> getIcons(){
+	public synchronized HashMap<String,File> getIcons(){
 		return icons;
 	}
-	public String getDayOfWeek(int day) {
+	public synchronized String getDayOfWeek(int day) {
 		return dayOfWeek[day%7];
 	}
-	public boolean getIsPaused() {
+	public synchronized boolean getIsPaused() {
 		return imageDirectory.isPaused;
 	}
 }
