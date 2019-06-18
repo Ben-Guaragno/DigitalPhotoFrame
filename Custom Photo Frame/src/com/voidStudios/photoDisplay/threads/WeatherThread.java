@@ -49,7 +49,7 @@ public class WeatherThread extends Thread{
 					//Daily Forecast
 					if(fio.hasDaily()) {
 						FIODaily daily=new FIODaily(fio);
-						if(daily.days()<0) {
+						if(daily.days()<3) {
 							//Forecast Error
 							weatherDay=null;
 							System.out.println(new Date()+ ": Error in daily forecast");
@@ -70,13 +70,13 @@ public class WeatherThread extends Thread{
 					if(fio.hasHourly()) {
 						//Hourly Forecast
 						FIOHourly hourly=new FIOHourly(fio);
-						if(hourly.hours()<0) {
+						if(hourly.hours()<6) {
 							//Forecast Error
 							weatherHour=null;
-							System.out.println(new Date()+ ": Error in hourly forecast");
+							System.out.println(new Date()+ ": Error in hourly forecast, only "+hourly.hours()+" hours");
 						}
 						else {
-							for(int j=0;j<12;j++) {
+							for(int j=0;j<6;j++) {
 								Hashtable<String,String> temp=new Hashtable<String,String>();
 								String [] h = hourly.getHour(j).getFieldsArray();
 								for(int i=0;i<h.length;i++) {
