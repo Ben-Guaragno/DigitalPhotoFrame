@@ -43,8 +43,26 @@ public class WeatherThread extends Thread{
 					weatherDay=new ArrayList<Hashtable<String,String>>();
 					weatherHour=new ArrayList<Hashtable<String,String>>();
 
-					ForecastIO fio=new ForecastIO(apiKey);
-					fio.getForecast(lat, lon);
+					boolean isError=true;
+					int errCount=0;
+					ForecastIO fio=null;
+					while(isError) {
+						isError=false;
+						fio=new ForecastIO(apiKey);
+						fio.getForecast(lat, lon);
+						try{
+							fio.getTimezone();
+						}catch(NullPointerException e1){
+							System.out.println(new Date()+": Error in weather timezone");
+							e1.printStackTrace();
+							isError=true;
+							errCount++;
+						}
+						if(errCount>10){
+							System.out.println(new Date()+": NullPointerException encountered "+errCount+" times. Breaking loop");
+							break;
+						}
+					}
 
 					//Daily Forecast
 					if(fio.hasDaily()) {
