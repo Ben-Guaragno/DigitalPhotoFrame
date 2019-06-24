@@ -2,6 +2,7 @@ package com.voidStudios.photoDisplay;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 import java.util.Scanner;
 import com.voidStudios.photoDisplay.threads.DateThread;
 import com.voidStudios.photoDisplay.threads.PhotoThread;
@@ -13,13 +14,7 @@ public class Main{
 		//Read outputs from config file (specified in command line)
 		//All inputs assumed to be minutes
 			//well... not right now...
-		int[] times=readConfig(args);
-		
-//		for(int x:times) {
-//			System.out.print(x+" ");
-//		}
-//		System.out.println();
-		
+		HashMap<String,String> config=readConfig(args);
 		
 		IconLoader iconLoader=new IconLoader();
 		ImageDirectory imageDirectory=new ImageDirectory("./photos");
@@ -27,9 +22,9 @@ public class Main{
 		View view=new View(data);
 		data.updateView(view);
 
-		PhotoThread photoThread=new PhotoThread(times[0], data);
-		DateThread dateThread=new DateThread(minToMilli(times[1]),data);
-		WeatherThread weatherThread=new WeatherThread(minToMilli(times[2]), data);
+		PhotoThread photoThread=new PhotoThread(Integer.parseInt(config.get("photoUpdate")), data);
+		DateThread dateThread=new DateThread(minToMilli(Integer.parseInt(config.get("dateUpdate"))),data);
+		WeatherThread weatherThread=new WeatherThread(minToMilli(Integer.parseInt(config.get("weatherUpdate"))), data, config.get("apiKey"), config.get("lat"), config.get("lon"));
 		photoThread.start();
 		dateThread.start();
 		weatherThread.start();
@@ -42,17 +37,23 @@ public class Main{
 		return min*60*1000;
 	}
 	
-	private static int[] readConfig(String[] args) {
-		int[] times= {5000,60,10};
+	private static HashMap<String,String> readConfig(String[] args) {
+		HashMap<String,String> config=new HashMap<String,String>();
+		config.put("photoUpdate", "5000");
+		config.put("dateUpdate", "60");
+		config.put("weatherUpdate", "10");
+		config.put("apiKey", null);
+		config.put("lat", null);
+		config.put("lon", null);
 		
 		if(args.length<1)
-			return times;
+			return config;
 		Scanner sc;
 		try {
 			sc=new Scanner(new File(args[0]));
 		} catch (FileNotFoundException e) {
-			System.out.println("Config not found");
-			return times;
+			System.out.println("Error: Config not found");
+			return config;
 		}
 		
 		
@@ -60,24 +61,20 @@ public class Main{
 			String s=sc.nextLine();
 			int x=s.indexOf('=');
 			if(x==-1) {
-				System.out.println("Invalid config line: "+s);
+				System.out.println("Error: Invalid config line: "+s);
 				break;
 			}
 			String tag=s.substring(0, x);
 			String valS=s.substring(x+1);
-			int val=Integer.parseInt(valS);
-			if(tag.equals("photoUpdate")) {
-				times[0]=val;
-			}else if(tag.equals("dateUpdate")) {
-				times[1]=val;
-			}else if(tag.equals("weatherUpdate")) {
-				times[2]=val;
-			}else {
-				System.out.println("Unrecognized tag: "+tag);
+
+			if(config.containsKey(tag)){
+				config.replace(tag, valS);
+			}else{
+				System.out.println("Error: Unrecognized tag: "+tag);
 			}
 		}
 		
 		sc.close();
-		return times;
+		return config;
 	}
 }

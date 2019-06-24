@@ -20,16 +20,19 @@ public class WeatherThread extends Thread{
 	private ArrayList<Hashtable<String,String>> weatherDay,weatherHour;
 	private String weatherSummary;
 	
-	private static String apiKey="AddAPIKey";
-	private static String lat="AddLat";
-	private static String lon="AddLon";
+	private String apiKey;
+	private String lat;
+	private String lon;
 	
-	public WeatherThread(int desireRuntime, DataController data) {
+	public WeatherThread(int desireRuntime, DataController data, String apiKey, String lat, String lon) {
 		this.desireRuntime=desireRuntime;
 		this.data=data;
 		if(desireRuntime<=0) {
 			System.out.println(new Date()+": The WeatherThread has been created with a runtime less than 0. Runtime: "+desireRuntime);
 		}
+		this.apiKey=apiKey;
+		this.lat=lat;
+		this.lon=lon;
 	}
 	
 	public void run(){
