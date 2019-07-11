@@ -67,79 +67,81 @@ public class WeatherThread extends Thread{
 						}
 					}
 
-					//Daily Forecast
-					if(fio.hasDaily()) {
-						FIODaily daily=new FIODaily(fio);
-						if(daily.days()<3) {
-							//Forecast Error
-							weatherDay=null;
-							System.out.println(new Date()+ ": Error in daily forecast");
-						}
-						else {
-							for(int j=0;j<3;j++) {
-								Hashtable<String,String> temp=new Hashtable<String,String>();
-								String [] h = daily.getDay(j).getFieldsArray();
-								for(int i=0;i<h.length;i++) {
-									temp.put(h[i], daily.getDay(j).getByKey(h[i]));
+					if(!isError){
+						//Daily Forecast
+						if(fio.hasDaily()){
+							FIODaily daily=new FIODaily(fio);
+							if(daily.days()<3){
+								//Forecast Error
+								weatherDay=null;
+								System.out.println(new Date()+": Error in daily forecast");
+							}else{
+								for(int j=0; j<3; j++){
+									Hashtable<String,String> temp=new Hashtable<String,String>();
+									String[] h=daily.getDay(j).getFieldsArray();
+									for(int i=0; i<h.length; i++){
+										temp.put(h[i], daily.getDay(j).getByKey(h[i]));
+									}
+									weatherDay.add(j, temp);
 								}
-								weatherDay.add(j, temp);
 							}
-						}
-					}else {
-						System.out.println(new Date()+ ": Daily forecast not available");
-					}
-					if(fio.hasHourly()) {
-						//Hourly Forecast
-						FIOHourly hourly=new FIOHourly(fio);
-						if(hourly.hours()<6) {
-							//Forecast Error
-							weatherHour=null;
-							System.out.println(new Date()+ ": Error in hourly forecast, only "+hourly.hours()+" hours");
-						}
-						else {
-							for(int j=0;j<6;j++) {
-								Hashtable<String,String> temp=new Hashtable<String,String>();
-								String [] h = hourly.getHour(j).getFieldsArray();
-								for(int i=0;i<h.length;i++) {
-									temp.put(h[i], hourly.getHour(j).getByKey(h[i]));
-								}
-								weatherHour.add(j, temp);
-							}
-						}
-					}else {
-						System.out.println(new Date()+ ": Hourly forecast not available");
-					}
-					
-					//Whole system to extract the overall hourly summary
-					String s="";
-					try {
-						ForecastIO fio2=new ForecastIO(apiKey);
-						fio2.setExcludeURL("minutely,daily,currently");
-
-						URL url=new URL(fio2.getUrl(lat, lon));
-						HttpURLConnection con = (HttpURLConnection) url.openConnection();
-						con.setRequestMethod("GET");
-						BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-						String inputLine;
-						StringBuffer content = new StringBuffer();
-						while ((inputLine = in.readLine()) != null) {
-							content.append(inputLine);
-						}
-						in.close();
-						int start=content.indexOf("summary")+"summary".length()+3;
-						if(start!=-1) {
-							s=content.substring(start);
-							int end=s.indexOf('"')-1;
-							s=s.substring(0, end);
 						}else{
-							System.out.println(new Date()+ ": Summary not contained in custom forecast fetch");
+							System.out.println(new Date()+": Daily forecast not available");
 						}
-					} catch (IOException e) {
-						System.out.println(new Date()+ ": Cobbled together stuff broke... Suprise!");
-						e.printStackTrace();
+						if(fio.hasHourly()){
+							//Hourly Forecast
+							FIOHourly hourly=new FIOHourly(fio);
+							if(hourly.hours()<6){
+								//Forecast Error
+								weatherHour=null;
+								System.out.println(
+										new Date()+": Error in hourly forecast, only "+hourly.hours()+" hours");
+							}else{
+								for(int j=0; j<6; j++){
+									Hashtable<String,String> temp=new Hashtable<String,String>();
+									String[] h=hourly.getHour(j).getFieldsArray();
+									for(int i=0; i<h.length; i++){
+										temp.put(h[i], hourly.getHour(j).getByKey(h[i]));
+									}
+									weatherHour.add(j, temp);
+								}
+							}
+						}else{
+							System.out.println(new Date()+": Hourly forecast not available");
+						}
+						//Whole system to extract the overall hourly summary
+						String s="";
+						try{
+							ForecastIO fio2=new ForecastIO(apiKey);
+							fio2.setExcludeURL("minutely,daily,currently");
+
+							URL url=new URL(fio2.getUrl(lat, lon));
+							HttpURLConnection con=(HttpURLConnection) url.openConnection();
+							con.setRequestMethod("GET");
+							BufferedReader in=new BufferedReader(new InputStreamReader(con.getInputStream()));
+							String inputLine;
+							StringBuffer content=new StringBuffer();
+							while((inputLine=in.readLine())!=null){
+								content.append(inputLine);
+							}
+							in.close();
+							int start=content.indexOf("summary")+"summary".length()+3;
+							if(start!=-1){
+								s=content.substring(start);
+								int end=s.indexOf('"')-1;
+								s=s.substring(0, end);
+							}else{
+								System.out.println(new Date()+": Summary not contained in custom forecast fetch");
+							}
+						}catch(IOException e){
+							System.out.println(new Date()+": Cobbled together stuff broke... Suprise!");
+							e.printStackTrace();
+						}
+						weatherSummary=s;
+						data.setWeather(weatherDay, weatherHour, weatherSummary);
+					}else {
+						System.out.println(new Date()+": Skipped weather due to error in weather timezone");
 					}
-					weatherSummary=s;
-					data.setWeather(weatherDay,weatherHour,weatherSummary);
 				}else {
 					System.out.println(new Date()+ ": Pause file in effect");
 				}
