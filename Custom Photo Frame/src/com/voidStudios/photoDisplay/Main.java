@@ -1,9 +1,12 @@
 package com.voidStudios.photoDisplay;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.fxml.FXMLLoader;
@@ -27,7 +30,20 @@ public class Main extends Application {
 				primaryStage.setY(bounds.getMinY());
 				primaryStage.setFullScreen(true);
 			}
+			
+			primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			    @Override
+			    public void handle(@SuppressWarnings("unused") WindowEvent t) {
+			        Platform.exit();
+			        System.exit(0);
+			    }
+			});
+			
 			primaryStage.show();
+			
+			Controller c=new Controller();
+			c.start();
+			
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
