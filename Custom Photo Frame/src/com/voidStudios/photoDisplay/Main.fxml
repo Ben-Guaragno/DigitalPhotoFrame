@@ -1,15 +1,159 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
-
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.voidStudios.photoDisplay.MainController">
    <center>
       <Pane prefHeight="1080.0" prefWidth="1920.0" BorderPane.alignment="CENTER">
          <children>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="363.0" stroke="BLACK" strokeType="INSIDE" width="538.0" />
             <ImageView fx:id="imageViewer" fitHeight="1080.0" fitWidth="1920.0" pickOnBounds="true" preserveRatio="true" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" height="100.0" opacity="0.2" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="354.0" />
+            <HBox>
+               <children>
+                  <HBox>
+                     <children>
+                        <VBox>
+                           <children>
+                              <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../Icons/Cloud-Sun.png" />
+                                 </image>
+                                 <VBox.margin>
+                                    <Insets bottom="-15.0" left="-13.0" right="-13.0" top="-15.0" />
+                                 </VBox.margin>
+                              </ImageView>
+                              <Label text="Thu" textFill="WHITE">
+                                 <font>
+                                    <Font name="Times New Roman Bold" size="25.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="10.0" top="-5.0" />
+                                 </VBox.margin>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <Label text="16°" textFill="WHITE">
+                                 <font>
+                                    <Font name="Times New Roman" size="30.0" />
+                                 </font>
+                              </Label>
+                              <Label text="1°" textFill="WHITE">
+                                 <font>
+                                    <Font name="Times New Roman" size="30.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets top="-5.0" />
+                                 </VBox.margin>
+                              </Label>
+                           </children>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <VBox>
+                           <children>
+                              <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../Icons/Cloud-Rain.png" />
+                                 </image>
+                                 <VBox.margin>
+                                    <Insets bottom="-15.0" left="-13.0" right="-13.0" top="-15.0" />
+                                 </VBox.margin>
+                              </ImageView>
+                              <Label text="Fri" textFill="WHITE">
+                                 <font>
+                                    <Font name="Times New Roman Bold" size="25.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="10.0" top="-5.0" />
+                                 </VBox.margin>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <Label text="16°" textFill="WHITE">
+                                 <font>
+                                    <Font name="Times New Roman" size="30.0" />
+                                 </font>
+                              </Label>
+                              <Label text="1°" textFill="WHITE">
+                                 <font>
+                                    <Font name="Times New Roman" size="30.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets top="-5.0" />
+                                 </VBox.margin>
+                              </Label>
+                           </children>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <VBox>
+                           <children>
+                              <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../Icons/Sun.png" />
+                                 </image>
+                                 <VBox.margin>
+                                    <Insets bottom="-15.0" left="-13.0" right="-13.0" top="-15.0" />
+                                 </VBox.margin>
+                              </ImageView>
+                              <Label text="Sat" textFill="WHITE">
+                                 <font>
+                                    <Font name="Times New Roman Bold" size="25.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="10.0" top="-5.0" />
+                                 </VBox.margin>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <Label text="16°" textFill="WHITE">
+                                 <font>
+                                    <Font name="Times New Roman" size="30.0" />
+                                 </font>
+                              </Label>
+                              <Label text="1°" textFill="WHITE">
+                                 <font>
+                                    <Font name="Times New Roman" size="30.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets top="-5.0" />
+                                 </VBox.margin>
+                              </Label>
+                           </children>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
          </children>
       </Pane>
    </center>
