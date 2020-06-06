@@ -157,4 +157,11 @@
          </children>
       </Pane>
    </center>
+   <right>
+      <Label fx:id="dateLabel" textAlignment="RIGHT" textFill="WHITE" BorderPane.alignment="TOP_LEFT">
+         <font>
+            <Font name="Times New Roman" size="30.0" />
+         </font>
+      </Label>
+   </right>
 </BorderPane>
