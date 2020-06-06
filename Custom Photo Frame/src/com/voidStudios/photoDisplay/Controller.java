@@ -22,21 +22,6 @@ public class Controller {
 		start();
 	}
 	
-	private void photoTask() {
-		System.out.println(new Date()+": Photo Task");
-	}
-	
-	private void weatherTask() {
-		System.out.println(new Date()+": Weather Task");
-	}
-	
-	private void dateTask() {
-		String dateS = dateFormat.format(new Date());
-		mainController.setDateLabel(dateS);
-		
-		System.out.println(new Date()+": Date Task");
-	}
-	
 	public void pause() {
 		timer.cancel();
 	}
@@ -68,7 +53,7 @@ public class Controller {
 		tmp=new TimerTask() {
 			@Override
 			public void run() {
-				photoTask();
+				System.out.println(new Date()+": Photo Task");
 			}
 		};
 		desiredTime=sloader.getPhotoUpdate();
@@ -79,7 +64,7 @@ public class Controller {
 		tmp=new TimerTask() {
 			@Override
 			public void run() {
-				weatherTask();
+				System.out.println(new Date()+": Weather Task");
 			}
 		};
 		desiredTime=sloader.getWeatherUpdate();
@@ -91,7 +76,10 @@ public class Controller {
 			tmp=new TimerTask() {
 				@Override
 				public void run() {
-					dateTask();
+					String dateS = dateFormat.format(new Date());
+					mainController.setDateLabel(dateS);
+					
+					System.out.println(new Date()+": Date Task");
 				}
 			};
 			desiredTime=sloader.getDateUpdate();
