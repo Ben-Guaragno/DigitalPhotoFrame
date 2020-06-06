@@ -1,6 +1,7 @@
-photoUpdate=5000
+photoUpdate=5
 weatherUpdate=1
 dateUpdate=60
+enableDate=true
 apiKey=abcdefg1234567
-lat=15.000
-lon=15.000
+lat=0
+lon=0
