@@ -1,5 +1,7 @@
 package com.voidStudios.photoDisplay;
 
+import java.util.List;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -17,12 +19,14 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			BorderPane root=(BorderPane) FXMLLoader.load(getClass().getResource("Main.fxml"));
+			FXMLLoader loader=new FXMLLoader(getClass().getResource("Main.fxml"));
+			BorderPane root=(BorderPane) loader.load();
+			MainController mainController=loader.getController();
 			Scene scene=new Scene(root, 1920, 1080);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.setResizable(false);
-			boolean debug=true;
+			boolean debug=false;
 			if(!debug) {
 				ObservableList<Screen> screens=Screen.getScreens();
 				Rectangle2D bounds=screens.get(1).getVisualBounds();
@@ -41,8 +45,16 @@ public class Main extends Application {
 			
 			primaryStage.show();
 			
-			Controller c=new Controller();
-			c.start();
+			List<String> args=getParameters().getRaw();
+			String configFile;
+			if(args.size()==0)
+				configFile=null;
+			else
+				configFile=args.get(0);
+			
+			SettingsLoader sl=new SettingsLoader(configFile);
+			
+			Controller c=new Controller(mainController, sl);
 			
 		}catch(Exception e) {
 			e.printStackTrace();
