@@ -12,7 +12,8 @@ public class Controller {
 	private Timer timer;
 	private SimpleDateFormat dateFormat;
 	private MainController mainController;
-	SettingsLoader sloader;
+	private SettingsLoader sloader;
+	private WeatherManager weatherManager=new WeatherManager();
 
 	public Controller(MainController mainController, SettingsLoader sloader) {
 		this.mainController=mainController;
@@ -71,9 +72,12 @@ public class Controller {
 			@Override
 			public void run() {
 				System.out.println(new Date()+": Weather Task");
+				WeatherContainer wc=weatherManager.getWeather();
+				mainController.setWeather(wc);
 			}
 		};
 		desiredTime=sloader.getWeatherUpdate();
+//		desiredTime=5000;
 		startTime=calcStartTime(desiredTime);
 		timer.scheduleAtFixedRate(tmp, new Date(startTime), desiredTime);
 		

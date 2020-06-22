@@ -7,14 +7,22 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 
 public class MainController {
 
+	public static final int NUM_DAILY_WEATHER=3;
+	private static final String DEGREE_SYMBOL="\u00b0";
 	@FXML
 	private ImageView imageViewer;
-
 	@FXML
 	private Label dateLabel;
+	@FXML
+	private HBox dailyWeatherHBox;
+	@FXML
+	private Rectangle dailyBackgroundRectangle;
 
 	public void initialize() {
 		imageViewer.setImage(new Image(new File("photos/space crop.png").toURI().toString()));
@@ -23,13 +31,25 @@ public class MainController {
 
 	public void setDateLabel(String s) {
 		Platform.runLater(new Runnable() {
-
 			@Override
 			public void run() {
 				dateLabel.setText(s);
 			}
 		});
-
+	}
+	
+	public void setWeather(WeatherContainer wc) {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				for(int i=0; i<wc.getNumDays(); i++) {
+					setDayWeatherHelper(i, wc);
+				}
+			}
+		});
+		
+		//This isn't required to be wrapped in a runLater. Odd.
+		setDailyBackgroundRect();
 	}
 
 	private void alignImage(ImageView imageView, boolean center) {
@@ -61,6 +81,28 @@ public class MainController {
 			imageView.setY((imageView.getFitHeight()-h)/2);
 
 		}
+	}
+	
+	private void setDayWeatherHelper(int i, WeatherContainer wc) {
+		HBox day=(HBox) dailyWeatherHBox.getChildrenUnmodifiable().get(i);
+		VBox vbox1=(VBox) day.getChildrenUnmodifiable().get(0);
+		VBox vbox2=(VBox) day.getChildrenUnmodifiable().get(1);
+		ImageView iv=(ImageView) vbox1.getChildrenUnmodifiable().get(0);
+		Label lDay=(Label) vbox1.getChildrenUnmodifiable().get(1);
+		Label lHigh=(Label) vbox2.getChildrenUnmodifiable().get(0);
+		Label lLow=(Label) vbox2.getChildrenUnmodifiable().get(1);
+
+		iv.setImage(new Image(wc.getDayIcon(i).toURI().toString()));
+		lDay.setText(wc.getDayName(i));
+		lHigh.setText(wc.getDayHigh(i)+DEGREE_SYMBOL);
+		lLow.setText(wc.getDayLow(i)+DEGREE_SYMBOL);
+	}
+	
+	private void setDailyBackgroundRect() {
+		double width=dailyWeatherHBox.getWidth();
+		dailyBackgroundRectangle.setWidth(width);
+		double height=dailyWeatherHBox.getHeight();
+		dailyBackgroundRectangle.setHeight(height);
 	}
 
 }

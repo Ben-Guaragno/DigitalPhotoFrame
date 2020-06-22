@@ -89,7 +89,7 @@ public class ImageDirectory {
 						if(pic!=null)
 							imageFiles.add(f);
 						else
-							System.err.println(new Date()+": Unreadable file in photos: "+f);
+							System.err.println(new Date()+": Unreadable file: "+f);
 					}else {
 						//Fast, based off of extension exclusively
 						String mimetype=Files.probeContentType(f.toPath());
@@ -97,7 +97,7 @@ public class ImageDirectory {
 						if(type.equals("image"))
 							imageFiles.add(f);
 						else
-							System.err.println(new Date()+": Unreadable file in photos: "+f);
+							System.err.println(new Date()+": Unreadable file: "+f);
 
 					}
 				}catch(IOException e) {
