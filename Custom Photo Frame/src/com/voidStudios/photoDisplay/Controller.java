@@ -19,6 +19,8 @@ public class Controller {
 		this.sloader=sloader;
 		dateFormat=new SimpleDateFormat("MMMM d");
 		
+		ImageDirectory idir=new ImageDirectory("photos", this);
+		
 		start();
 	}
 	
@@ -44,6 +46,10 @@ public class Controller {
 	}
 	
 	public void start() {
+		//Ensures the multiple timers cannot be started
+		if(timer!=null)
+			timer.cancel();
+
 		long startTime;
 		int desiredTime;
 		timer=new Timer();
