@@ -1,5 +1,6 @@
 package com.voidStudios.photoDisplay;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
@@ -14,13 +15,14 @@ public class Controller {
 	private MainController mainController;
 	private SettingsLoader sloader;
 	private WeatherManager weatherManager=new WeatherManager();
+	private ImageDirectory iDir;
 
 	public Controller(MainController mainController, SettingsLoader sloader) {
 		this.mainController=mainController;
 		this.sloader=sloader;
 		dateFormat=new SimpleDateFormat("MMMM d");
 		
-		ImageDirectory idir=new ImageDirectory("photos", this);
+		iDir=new ImageDirectory("photos", this);
 		
 		start();
 	}
@@ -61,6 +63,11 @@ public class Controller {
 			@Override
 			public void run() {
 				System.out.println(new Date()+": Photo Task");
+				File f=iDir.nextFile();
+				if(f!=null)
+					mainController.setImage(f);
+				else
+					System.err.println(new Date()+": No photos found");
 			}
 		};
 		desiredTime=sloader.getPhotoUpdate();

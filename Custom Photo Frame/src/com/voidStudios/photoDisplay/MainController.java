@@ -25,8 +25,8 @@ public class MainController {
 	private Rectangle dailyBackgroundRectangle;
 
 	public void initialize() {
-		imageViewer.setImage(new Image(new File("photos/space crop.png").toURI().toString()));
-		alignImage(imageViewer, false);
+//		imageViewer.setImage(new Image(new File("photos/space crop.png").toURI().toString()));
+//		alignImage(imageViewer, false);
 	}
 
 	public void setDateLabel(String s) {
@@ -50,6 +50,12 @@ public class MainController {
 		
 		//This isn't required to be wrapped in a runLater. Odd.
 		setDailyBackgroundRect();
+	}
+	
+	public void setImage(File f) {
+		imageViewer.setImage(new Image(f.toURI().toString()));
+		
+		alignImage(imageViewer, false);
 	}
 
 	private void alignImage(ImageView imageView, boolean center) {
