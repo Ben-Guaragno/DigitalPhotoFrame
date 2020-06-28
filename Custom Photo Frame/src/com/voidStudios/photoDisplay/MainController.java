@@ -3,10 +3,13 @@ package com.voidStudios.photoDisplay;
 import java.io.File;
 
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
@@ -14,6 +17,7 @@ import javafx.scene.shape.Rectangle;
 public class MainController {
 
 	public static final int NUM_DAILY_WEATHER=3;
+	public static final int NUM_HOURLY_WEATHER=6;
 	private static final String DEGREE_SYMBOL="\u00b0";
 	@FXML
 	private ImageView imageViewer;
@@ -23,6 +27,10 @@ public class MainController {
 	private HBox dailyWeatherHBox;
 	@FXML
 	private Rectangle dailyBackgroundRectangle;
+	@FXML
+	private Rectangle hourlyBackgroundRectangle;
+	@FXML
+	private GridPane hourlyGrid;
 
 	public void initialize() {
 //		imageViewer.setImage(new Image(new File("photos/space crop.png").toURI().toString()));
@@ -31,30 +39,35 @@ public class MainController {
 
 	public void setDateLabel(String s) {
 		Platform.runLater(new Runnable() {
+
 			@Override
 			public void run() {
 				dateLabel.setText(s);
 			}
 		});
 	}
-	
+
 	public void setWeather(WeatherContainer wc) {
 		Platform.runLater(new Runnable() {
+
 			@Override
 			public void run() {
 				for(int i=0; i<wc.getNumDays(); i++) {
-					setDayWeatherHelper(i, wc);
+					setDayWeather(i, wc);
 				}
+				for(int i=0; i<wc.getNumHours(); i++) {
+					setHourWeather(i, wc);
+				}
+				
+				setDailyBackgroundRect();
+				setHourlyBackgroundRect();
 			}
 		});
-		
-		//This isn't required to be wrapped in a runLater. Odd.
-		setDailyBackgroundRect();
 	}
-	
+
 	public void setImage(File f) {
 		imageViewer.setImage(new Image(f.toURI().toString()));
-		
+
 		alignImage(imageViewer, false);
 	}
 
@@ -88,8 +101,8 @@ public class MainController {
 
 		}
 	}
-	
-	private void setDayWeatherHelper(int i, WeatherContainer wc) {
+
+	private void setDayWeather(int i, WeatherContainer wc) {
 		HBox day=(HBox) dailyWeatherHBox.getChildrenUnmodifiable().get(i);
 		VBox vbox1=(VBox) day.getChildrenUnmodifiable().get(0);
 		VBox vbox2=(VBox) day.getChildrenUnmodifiable().get(1);
@@ -104,11 +117,29 @@ public class MainController {
 		lLow.setText(wc.getDayLow(i)+DEGREE_SYMBOL);
 	}
 	
+	private void setHourWeather(int i, WeatherContainer wc) {
+		ObservableList<Node> hourlyList=hourlyGrid.getChildrenUnmodifiable();
+		Label lTime=(Label) hourlyList.get(i*3);
+		ImageView iv=(ImageView) hourlyList.get(i*3+1);
+		Label lTempSumm=(Label) hourlyList.get(i*3+2);
+		
+		lTime.setText(wc.getHourTime(i));
+		iv.setImage(new Image(wc.getHourIcon(i).toURI().toString()));
+		lTempSumm.setText(wc.getHourTemp(i)+DEGREE_SYMBOL+" "+wc.getHourSumm(i));
+	}
+
 	private void setDailyBackgroundRect() {
-		double width=dailyWeatherHBox.getWidth();
-		dailyBackgroundRectangle.setWidth(width);
 		double height=dailyWeatherHBox.getHeight();
+		double width=dailyWeatherHBox.prefWidth(height);
+		dailyBackgroundRectangle.setWidth(width);
 		dailyBackgroundRectangle.setHeight(height);
+	}
+	
+	private void setHourlyBackgroundRect() {
+		double height=hourlyGrid.getHeight();
+		double width=hourlyGrid.prefWidth(height);
+		hourlyBackgroundRectangle.setWidth(width);
+		hourlyBackgroundRectangle.setHeight(height);
 	}
 
 }
