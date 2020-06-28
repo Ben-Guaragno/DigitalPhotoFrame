@@ -66,8 +66,6 @@ public class Controller {
 				File f=iDir.nextFile();
 				if(f!=null)
 					mainController.setImage(f);
-				else
-					System.err.println(new Date()+": No photos found");
 			}
 		};
 		desiredTime=sloader.getPhotoUpdate();

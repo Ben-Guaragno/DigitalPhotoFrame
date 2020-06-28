@@ -117,6 +117,10 @@ public class ImageDirectory {
 			//Either still paused or still running
 		}
 		isPaused=pause;
+		
+		if(imageFiles.size()==0) {
+			System.err.println(new Date()+": No valid photos found in photos directory");
+		}
 
 		Collections.shuffle(imageFiles);
 	}
