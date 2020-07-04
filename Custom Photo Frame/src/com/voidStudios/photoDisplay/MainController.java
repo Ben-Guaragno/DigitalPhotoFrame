@@ -30,7 +30,13 @@ public class MainController {
 	@FXML
 	private Rectangle hourlyBackgroundRectangle;
 	@FXML
+	private Rectangle summaryBackgroundRectangle;
+	@FXML
+	private Rectangle dateBackgroundRectangle;
+	@FXML
 	private GridPane hourlyGrid;
+	@FXML
+	private Label summaryLabel;
 
 	public void initialize() {
 //		imageViewer.setImage(new Image(new File("photos/space crop.png").toURI().toString()));
@@ -43,6 +49,7 @@ public class MainController {
 			@Override
 			public void run() {
 				dateLabel.setText(s);
+				setDateBackgroundRect();
 			}
 		});
 	}
@@ -58,9 +65,11 @@ public class MainController {
 				for(int i=0; i<wc.getNumHours(); i++) {
 					setHourWeather(i, wc);
 				}
+				setWeatherSummary(wc);
 				
 				setDailyBackgroundRect();
 				setHourlyBackgroundRect();
+				setSummaryBackgroundRect();
 			}
 		});
 	}
@@ -127,6 +136,11 @@ public class MainController {
 		iv.setImage(new Image(wc.getHourIcon(i).toURI().toString()));
 		lTempSumm.setText(wc.getHourTemp(i)+DEGREE_SYMBOL+" "+wc.getHourSumm(i));
 	}
+	
+	private void setWeatherSummary(WeatherContainer wc) {
+		String summ=wc.getSummary();
+		summaryLabel.setText(summ);
+	}
 
 	private void setDailyBackgroundRect() {
 		double height=dailyWeatherHBox.getHeight();
@@ -140,6 +154,18 @@ public class MainController {
 		double width=hourlyGrid.prefWidth(height);
 		hourlyBackgroundRectangle.setWidth(width);
 		hourlyBackgroundRectangle.setHeight(height);
+	}
+	
+	private void setSummaryBackgroundRect() {
+		double height=summaryLabel.getHeight();
+		double width=summaryLabel.prefWidth(height);
+		summaryBackgroundRectangle.setWidth(width+10);
+	}
+	
+	private void setDateBackgroundRect() {
+		double height=dateLabel.getHeight();
+		double width=dateLabel.prefWidth(height);
+		dateBackgroundRectangle.setWidth(width+4);
 	}
 
 }

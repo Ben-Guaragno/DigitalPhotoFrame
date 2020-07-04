@@ -14,7 +14,7 @@ public class Controller {
 	private SimpleDateFormat dateFormat;
 	private MainController mainController;
 	private SettingsLoader sloader;
-	private WeatherManager weatherManager=new WeatherManager();
+	private WeatherManager weatherManager;
 	private ImageDirectory iDir;
 
 	public Controller(MainController mainController, SettingsLoader sloader) {
@@ -23,6 +23,8 @@ public class Controller {
 		dateFormat=new SimpleDateFormat("MMMM d");
 		
 		iDir=new ImageDirectory("photos", this);
+		
+		weatherManager=new WeatherManager(sloader.getAPIKey(), sloader.getLat(), sloader.getLon());
 		
 		start();
 	}
@@ -78,7 +80,8 @@ public class Controller {
 			public void run() {
 				System.out.println(new Date()+": Weather Task");
 				WeatherContainer wc=weatherManager.getWeather();
-				mainController.setWeather(wc);
+				if(wc!=null)
+					mainController.setWeather(wc);
 			}
 		};
 		desiredTime=sloader.getWeatherUpdate();

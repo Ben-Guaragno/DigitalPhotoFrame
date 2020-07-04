@@ -7,28 +7,29 @@ import java.util.ArrayList;
 public class WeatherContainer {
 	private ArrayList<String> dayName;
 	private ArrayList<File> dayIcon;
-	private ArrayList<Integer> dayHigh;
-	private ArrayList<Integer> dayLow;
+	private ArrayList<String> dayHigh;
+	private ArrayList<String> dayLow;
 	private ArrayList<String> hourTime;
 	private ArrayList<File> hourIcon;
-	private ArrayList<Integer> hourTemp;
+	private ArrayList<String> hourTemp;
 	private ArrayList<String> hourSumm;
 	int numDays;
 	int numHours;
+	String summary;
 
 	public WeatherContainer() {
 		int numDays=MainController.NUM_DAILY_WEATHER;
 		dayName=new ArrayList<String>(numDays);
 		dayIcon=new ArrayList<File>(numDays);
-		dayHigh=new ArrayList<Integer>(numDays);
-		dayLow=new ArrayList<Integer>(numDays);
+		dayHigh=new ArrayList<String>(numDays);
+		dayLow=new ArrayList<String>(numDays);
 		hourTime=new ArrayList<String>(numDays);
 		hourIcon=new ArrayList<File>(numDays);
-		hourTemp=new ArrayList<Integer>(numDays);
+		hourTemp=new ArrayList<String>(numDays);
 		hourSumm=new ArrayList<String>(numDays);
 	}
 	
-	public void addDay(String dayName, File dayIcon, int dayHigh, int dayLow) {
+	public void addDay(String dayName, File dayIcon, String dayHigh, String dayLow) {
 		if(numDays>=MainController.NUM_DAILY_WEATHER)
 			throw new BufferOverflowException();
 		this.dayName.add(dayName);
@@ -38,7 +39,7 @@ public class WeatherContainer {
 		numDays++;
 	}
 	
-	public void addHour(String hourTime, File hourIcon, int hourTemp, String hourSumm) {
+	public void addHour(String hourTime, File hourIcon, String hourTemp, String hourSumm) {
 		if(numHours>=MainController.NUM_HOURLY_WEATHER)
 			throw new BufferOverflowException();
 		this.hourTime.add(hourTime);
@@ -46,6 +47,10 @@ public class WeatherContainer {
 		this.hourTemp.add(hourTemp);
 		this.hourSumm.add(hourSumm);
 		numHours++;
+	}
+	
+	public void addSummary(String summary) {
+		this.summary=summary;
 	}
 	
 	public int getNumDays() {
@@ -60,11 +65,11 @@ public class WeatherContainer {
 		return dayIcon.get(i);
 	}
 	
-	public int getDayHigh(int i) {
+	public String getDayHigh(int i) {
 		return dayHigh.get(i);
 	}
 	
-	public int getDayLow(int i) {
+	public String getDayLow(int i) {
 		return dayLow.get(i);
 	}
 	
@@ -80,12 +85,16 @@ public class WeatherContainer {
 		return hourIcon.get(i);
 	}
 	
-	public int getHourTemp(int i) {
+	public String getHourTemp(int i) {
 		return hourTemp.get(i);
 	}
 	
 	public String getHourSumm(int i) {
 		return hourSumm.get(i);
+	}
+	
+	public String getSummary() {
+		return summary;
 	}
 
 }

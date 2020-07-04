@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
@@ -18,7 +19,7 @@
    <center>
       <Pane prefHeight="1080.0" prefWidth="1920.0" BorderPane.alignment="CENTER">
          <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="363.0" stroke="BLACK" strokeType="INSIDE" width="538.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="1114.0" stroke="BLACK" strokeType="INSIDE" width="538.0" />
             <ImageView fx:id="imageViewer" fitHeight="1080.0" fitWidth="1920.0" pickOnBounds="true" preserveRatio="true" />
             <Rectangle fx:id="dailyBackgroundRectangle" height="99.0" opacity="0.4" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="353.0" />
             <Rectangle fx:id="hourlyBackgroundRectangle" height="210.0" layoutY="99.0" opacity="0.4" smooth="false" stroke="BLACK" strokeMiterLimit="0.0" strokeType="OUTSIDE" strokeWidth="0.0" width="292.0" />
@@ -277,19 +278,37 @@
                   <Insets bottom="5.0" left="10.0" right="7.0" />
                </padding>
             </GridPane>
-            <VBox layoutY="99.0" spacing="5.0">
-               <children>
-                  <HBox />
-               </children>
-            </VBox>
          </children>
       </Pane>
    </center>
+   <bottom>
+      <StackPane alignment="BOTTOM_LEFT" BorderPane.alignment="CENTER">
+         <children>
+            <Rectangle fx:id="summaryBackgroundRectangle" height="38.0" opacity="0.4" smooth="false" stroke="BLACK" strokeMiterLimit="0.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+            <Label fx:id="summaryLabel" textFill="WHITE">
+               <font>
+                  <Font name="Times New Roman" size="30.0" />
+               </font>
+               <StackPane.margin>
+                  <Insets bottom="3.0" left="5.0" />
+               </StackPane.margin>
+            </Label>
+         </children>
+      </StackPane>
+   </bottom>
    <right>
-      <Label fx:id="dateLabel" textAlignment="RIGHT" textFill="WHITE" BorderPane.alignment="TOP_LEFT">
-         <font>
-            <Font name="Times New Roman" size="30.0" />
-         </font>
-      </Label>
+      <StackPane alignment="TOP_RIGHT" BorderPane.alignment="CENTER">
+         <children>
+            <Rectangle fx:id="dateBackgroundRectangle" height="28.0" opacity="0.4" smooth="false" stroke="BLACK" strokeMiterLimit="0.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+            <Label fx:id="dateLabel" textAlignment="RIGHT" textFill="WHITE" StackPane.alignment="TOP_RIGHT">
+               <font>
+                  <Font name="Times New Roman" size="30.0" />
+               </font>
+               <StackPane.margin>
+                  <Insets top="-4.0" />
+               </StackPane.margin>
+            </Label>
+         </children>
+      </StackPane>
    </right>
 </BorderPane>
