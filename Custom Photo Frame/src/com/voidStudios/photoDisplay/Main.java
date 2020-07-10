@@ -10,6 +10,7 @@ import javafx.event.EventHandler;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.fxml.FXMLLoader;
@@ -25,6 +26,7 @@ public class Main extends Application {
 			MainController mainController=loader.getController();
 			Scene scene=new Scene(root, 1920, 1080);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			scene.setCursor(Cursor.NONE);
 			primaryStage.setScene(scene);
 			primaryStage.setResizable(false);
 			ObservableList<Screen> screens=Screen.getScreens();
@@ -57,6 +59,7 @@ public class Main extends Application {
 			
 			SettingsLoader sl=new SettingsLoader(configFile);
 			
+			@SuppressWarnings("unused")
 			Controller c=new Controller(mainController, sl);
 			
 		}catch(Exception e) {
