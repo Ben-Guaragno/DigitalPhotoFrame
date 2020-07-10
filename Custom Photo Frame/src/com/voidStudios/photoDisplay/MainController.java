@@ -74,10 +74,10 @@ public class MainController {
 		});
 	}
 
-	public void setImage(File f) {
+	public void setImage(File f, boolean center) {
 		imageViewer.setImage(new Image(f.toURI().toString()));
 
-		alignImage(imageViewer, false);
+		alignImage(imageViewer, center);
 	}
 
 	private void alignImage(ImageView imageView, boolean center) {
@@ -146,14 +146,14 @@ public class MainController {
 		double height=dailyWeatherHBox.getHeight();
 		double width=dailyWeatherHBox.prefWidth(height);
 		dailyBackgroundRectangle.setWidth(width);
-		dailyBackgroundRectangle.setHeight(height);
+//		dailyBackgroundRectangle.setHeight(height);
 	}
 	
 	private void setHourlyBackgroundRect() {
 		double height=hourlyGrid.getHeight();
 		double width=hourlyGrid.prefWidth(height);
 		hourlyBackgroundRectangle.setWidth(width);
-		hourlyBackgroundRectangle.setHeight(height);
+//		hourlyBackgroundRectangle.setHeight(height);
 	}
 	
 	private void setSummaryBackgroundRect() {
@@ -165,7 +165,9 @@ public class MainController {
 	private void setDateBackgroundRect() {
 		double height=dateLabel.getHeight();
 		double width=dateLabel.prefWidth(height);
+		height=dateLabel.prefHeight(width);
 		dateBackgroundRectangle.setWidth(width+4);
+		dateBackgroundRectangle.setHeight(height+4);
 	}
 
 }

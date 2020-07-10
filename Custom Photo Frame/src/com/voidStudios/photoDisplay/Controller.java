@@ -64,10 +64,10 @@ public class Controller {
 		tmp=new TimerTask() {
 			@Override
 			public void run() {
-				System.out.println(new Date()+": Photo Task");
+//				System.out.println(new Date()+": Photo Task");
 				File f=iDir.nextFile();
 				if(f!=null)
-					mainController.setImage(f);
+					mainController.setImage(f, sloader.getPhotoCenterAlign());
 			}
 		};
 		desiredTime=sloader.getPhotoUpdate();
@@ -78,7 +78,7 @@ public class Controller {
 		tmp=new TimerTask() {
 			@Override
 			public void run() {
-				System.out.println(new Date()+": Weather Task");
+//				System.out.println(new Date()+": Weather Task");
 				WeatherContainer wc=weatherManager.getWeather();
 				if(wc!=null)
 					mainController.setWeather(wc);
@@ -97,7 +97,7 @@ public class Controller {
 					String dateS = dateFormat.format(new Date());
 					mainController.setDateLabel(dateS);
 					
-					System.out.println(new Date()+": Date Task");
+//					System.out.println(new Date()+": Date Task");
 				}
 			};
 			desiredTime=sloader.getDateUpdate();

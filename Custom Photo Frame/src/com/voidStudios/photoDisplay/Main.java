@@ -1,5 +1,6 @@
 package com.voidStudios.photoDisplay;
 
+import java.util.Date;
 import java.util.List;
 
 import javafx.application.Application;
@@ -26,14 +27,16 @@ public class Main extends Application {
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.setResizable(false);
-			boolean debug=false;
-			if(!debug) {
-				ObservableList<Screen> screens=Screen.getScreens();
-				Rectangle2D bounds=screens.get(1).getVisualBounds();
-				primaryStage.setX(bounds.getMinX());
-				primaryStage.setY(bounds.getMinY());
-				primaryStage.setFullScreen(true);
+			ObservableList<Screen> screens=Screen.getScreens();
+			Rectangle2D bounds;
+			if(screens.size()==1) {
+				bounds=screens.get(0).getVisualBounds();
+			}else {
+				bounds=screens.get(1).getVisualBounds();
 			}
+			primaryStage.setX(bounds.getMinX());
+			primaryStage.setY(bounds.getMinY());
+			primaryStage.setFullScreen(true);
 			
 			primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			    @Override
@@ -62,6 +65,7 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
+		System.out.println(new Date()+": Initializing JFX Photo Frame.");
 		launch(args);
 	}
 }

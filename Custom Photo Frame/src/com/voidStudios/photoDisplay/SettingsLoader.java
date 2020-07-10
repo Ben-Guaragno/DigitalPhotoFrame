@@ -9,16 +9,17 @@ public class SettingsLoader {
 
 	private static final String LAT_DEFAULT="0";
 	private static final String LON_DEFAULT="0";
-	private static final String API_KEY_DEFAULT="abcdefg1234567";
+	private static final String API_KEY_DEFAULT=null;
 	private static final String PHOTO_DEFAULT="5";
 	private static final String WEATHER_DEFAULT="1";
 	private static final String DATE_DEFAULT="60";
 	private static final String ENABLE_DATE_DEFAULT="true";
+	private static final String PHOTO_CENTER_ALIGN="true";
 	private Properties props;
 
 	public SettingsLoader(String configFileString) {
 		props=new Properties();
-		File configFile=new File(configFileString);
+		File configFile=configFileString!=null ? new File(configFileString) : null;
 		FileInputStream fis=null;
 		try {
 			fis=new FileInputStream(configFile);
@@ -26,6 +27,7 @@ public class SettingsLoader {
 		}catch(Exception e) {
 			//Configuration file could not be found or read
 			//Defaults will automatically be substituted
+			System.err.println("WARNING: No configuration file supplied, using default values.");
 		}
 		try {
 			if(fis!=null)
@@ -89,6 +91,20 @@ public class SettingsLoader {
 			return false;
 		}else {
 			System.err.println("WARNING: enableDate config value not true/false. Defaulting to "+ENABLE_DATE_DEFAULT+".");
+			//TODO update to follow static var
+			return true;
+		}
+	}
+	
+	public boolean getPhotoCenterAlign() {
+		String s=props.getProperty("centerPhoto", PHOTO_CENTER_ALIGN);
+		if(s.equalsIgnoreCase("true")) {
+			return true;
+		}else if(s.equalsIgnoreCase("false")) {
+			return false;
+		}else {
+			System.err.println("WARNING: photoAlign config value not true/false. Defaulting to "+PHOTO_CENTER_ALIGN+".");
+			//TODO update to follow static var
 			return true;
 		}
 	}

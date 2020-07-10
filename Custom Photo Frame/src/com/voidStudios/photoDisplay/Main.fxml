@@ -19,7 +19,6 @@
    <center>
       <Pane prefHeight="1080.0" prefWidth="1920.0" BorderPane.alignment="CENTER">
          <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="1114.0" stroke="BLACK" strokeType="INSIDE" width="538.0" />
             <ImageView fx:id="imageViewer" fitHeight="1080.0" fitWidth="1920.0" pickOnBounds="true" preserveRatio="true" />
             <Rectangle fx:id="dailyBackgroundRectangle" height="99.0" opacity="0.4" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="353.0" />
             <Rectangle fx:id="hourlyBackgroundRectangle" height="210.0" layoutY="99.0" opacity="0.4" smooth="false" stroke="BLACK" strokeMiterLimit="0.0" strokeType="OUTSIDE" strokeWidth="0.0" width="292.0" />
@@ -300,15 +299,18 @@
       <StackPane alignment="TOP_RIGHT" BorderPane.alignment="CENTER">
          <children>
             <Rectangle fx:id="dateBackgroundRectangle" height="28.0" opacity="0.4" smooth="false" stroke="BLACK" strokeMiterLimit="0.0" strokeType="OUTSIDE" strokeWidth="0.0" />
-            <Label fx:id="dateLabel" textAlignment="RIGHT" textFill="WHITE" StackPane.alignment="TOP_RIGHT">
+            <Label fx:id="dateLabel" text="July 10" textAlignment="RIGHT" textFill="WHITE" StackPane.alignment="TOP_RIGHT">
                <font>
-                  <Font name="Times New Roman" size="30.0" />
+                  <Font name="Times New Roman" size="60.0" />
                </font>
                <StackPane.margin>
-                  <Insets top="-4.0" />
+                  <Insets />
                </StackPane.margin>
             </Label>
          </children>
+         <BorderPane.margin>
+            <Insets top="-6.0" />
+         </BorderPane.margin>
       </StackPane>
    </right>
 </BorderPane>

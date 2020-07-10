@@ -37,6 +37,11 @@ public class WeatherManager {
 	}
 	
 	public WeatherContainer getWeather() {
+		if(apiKey==null) {
+			System.err.println(new Date()+": No API Key provided, skipping weather fetch.");
+			return null;
+		}
+		
 		ArrayList<Hashtable<String,String>> weatherDay,weatherHour;
 		weatherDay=new ArrayList<Hashtable<String,String>>();
 		weatherHour=new ArrayList<Hashtable<String,String>>();
