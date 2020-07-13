@@ -13,8 +13,8 @@ public class SettingsLoader {
 	private static final String PHOTO_DEFAULT="5";
 	private static final String WEATHER_DEFAULT="1";
 	private static final String DATE_DEFAULT="60";
-	private static final String ENABLE_DATE_DEFAULT="true";
-	private static final String PHOTO_CENTER_ALIGN="true";
+	private static final boolean ENABLE_DATE_DEFAULT=true;
+	private static final boolean PHOTO_CENTER_ALIGN=true;
 	private Properties props;
 
 	public SettingsLoader(String configFileString) {
@@ -84,28 +84,26 @@ public class SettingsLoader {
 	}
 	
 	public boolean getIsDateEnabled() {
-		String s=props.getProperty("enableDate", ENABLE_DATE_DEFAULT);
+		String s=props.getProperty("enableDate", ENABLE_DATE_DEFAULT+"");
 		if(s.equalsIgnoreCase("true")) {
 			return true;
 		}else if(s.equalsIgnoreCase("false")) {
 			return false;
 		}else {
 			System.err.println("WARNING: enableDate config value not true/false. Defaulting to "+ENABLE_DATE_DEFAULT+".");
-			//TODO update to follow static var
-			return true;
+			return ENABLE_DATE_DEFAULT;
 		}
 	}
 	
 	public boolean getPhotoCenterAlign() {
-		String s=props.getProperty("centerPhoto", PHOTO_CENTER_ALIGN);
+		String s=props.getProperty("centerPhoto", PHOTO_CENTER_ALIGN+"");
 		if(s.equalsIgnoreCase("true")) {
 			return true;
 		}else if(s.equalsIgnoreCase("false")) {
 			return false;
 		}else {
 			System.err.println("WARNING: photoAlign config value not true/false. Defaulting to "+PHOTO_CENTER_ALIGN+".");
-			//TODO update to follow static var
-			return true;
+			return PHOTO_CENTER_ALIGN;
 		}
 	}
 

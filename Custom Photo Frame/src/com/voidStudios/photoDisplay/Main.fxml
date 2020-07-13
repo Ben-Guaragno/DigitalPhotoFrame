@@ -299,7 +299,7 @@
       <StackPane alignment="TOP_RIGHT" BorderPane.alignment="CENTER">
          <children>
             <Rectangle fx:id="dateBackgroundRectangle" height="28.0" opacity="0.4" smooth="false" stroke="BLACK" strokeMiterLimit="0.0" strokeType="OUTSIDE" strokeWidth="0.0" />
-            <Label fx:id="dateLabel" text="July 10" textAlignment="RIGHT" textFill="WHITE" StackPane.alignment="TOP_RIGHT">
+            <Label fx:id="dateLabel" textAlignment="RIGHT" textFill="WHITE" StackPane.alignment="TOP_RIGHT">
                <font>
                   <Font name="Times New Roman" size="60.0" />
                </font>

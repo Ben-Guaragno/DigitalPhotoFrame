@@ -43,9 +43,9 @@ public class ImageDirectory {
 
 		try {
 			dirWatcher=FileSystems.getDefault().newWatchService();
-		}catch(IOException e1) {
+		}catch(IOException e) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			e.printStackTrace();
 		}
 
 		(new WatcherThread(dirWatcher)).start();
@@ -93,8 +93,11 @@ public class ImageDirectory {
 					}else {
 						//Fast, based off of extension exclusively
 						String mimetype=Files.probeContentType(f.toPath());
-						String type=mimetype.split("/")[0];
-						if(type.equals("image"))
+						String type=null;
+						if(mimetype!=null) {
+							type=mimetype.split("/")[0];
+						}
+						if(type!=null && type.equals("image"))
 							imageFiles.add(f);
 						else
 							System.err.println(new Date()+": Unreadable file: "+f);
@@ -107,10 +110,10 @@ public class ImageDirectory {
 			}
 		}
 		if(isPaused && !pause) {
-			//Restart
+			//Pause file removed, resume
 			controller.start();
 		}else if(!isPaused && pause) {
-			//Stop
+			//Pause file creates, pause
 			controller.pause();
 		}else {
 			//No Action
