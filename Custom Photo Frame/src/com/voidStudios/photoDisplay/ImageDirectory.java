@@ -30,7 +30,7 @@ public class ImageDirectory {
 
 	public ImageDirectory(String dir, Controller controller) {
 		this.controller=controller;
-		
+
 		imageFiles=new Vector<File>();
 		isPaused=false;
 
@@ -80,16 +80,16 @@ public class ImageDirectory {
 				}
 
 				try {
-						//Fast, based off of extension exclusively
-						String mimetype=Files.probeContentType(f.toPath());
-						String type=null;
-						if(mimetype!=null) {
-							type=mimetype.split("/")[0];
-						}
-						if(type!=null && type.equals("image"))
-							imageFiles.add(f);
-						else
-							System.err.println(new Date()+": Unreadable file: "+f);
+					//Fast, based off of extension exclusively
+					String mimetype=Files.probeContentType(f.toPath());
+					String type=null;
+					if(mimetype!=null) {
+						type=mimetype.split("/")[0];
+					}
+					if(type!=null && type.equals("image"))
+						imageFiles.add(f);
+					else
+						System.err.println(new Date()+": Unreadable file: "+f);
 				}catch(IOException e) {
 					//Could not read file to determine mimetype
 					System.err.println(new Date()+": Cannot open file: "+f);
@@ -107,7 +107,7 @@ public class ImageDirectory {
 			//Either still paused or still running
 		}
 		isPaused=pause;
-		
+
 		if(imageFiles.size()==0) {
 			System.err.println(new Date()+": No valid photos found in photos directory");
 		}
@@ -147,7 +147,6 @@ public class ImageDirectory {
 		public void run() {
 			try {
 				while(true) {
-					System.out.println("yeet");
 					WatchKey key;
 					key=dirWatcher.take();
 					//Ensures events are removed from the queue

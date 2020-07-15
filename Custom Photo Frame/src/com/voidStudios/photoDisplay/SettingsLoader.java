@@ -35,7 +35,7 @@ public class SettingsLoader {
 		}catch(IOException e) {
 			System.err.println("WARNING: Configuration Input Stream failed to close cleanly.");
 		}
-		
+
 	}
 
 	public String getLat() {
@@ -71,7 +71,7 @@ public class SettingsLoader {
 			return Integer.parseInt(WEATHER_DEFAULT)*60000;
 		}
 	}
-	
+
 	public int getDateUpdate() {
 		String s=props.getProperty("dateUpdate", DATE_DEFAULT);
 		try {
@@ -82,7 +82,7 @@ public class SettingsLoader {
 			return Integer.parseInt(DATE_DEFAULT)*60000;
 		}
 	}
-	
+
 	public boolean getIsDateEnabled() {
 		String s=props.getProperty("enableDate", ENABLE_DATE_DEFAULT+"");
 		if(s.equalsIgnoreCase("true")) {
@@ -94,7 +94,7 @@ public class SettingsLoader {
 			return ENABLE_DATE_DEFAULT;
 		}
 	}
-	
+
 	public boolean getPhotoCenterAlign() {
 		String s=props.getProperty("centerPhoto", PHOTO_CENTER_ALIGN+"");
 		if(s.equalsIgnoreCase("true")) {

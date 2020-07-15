@@ -5,6 +5,7 @@ import java.nio.BufferOverflowException;
 import java.util.ArrayList;
 
 public class WeatherContainer {
+
 	private ArrayList<String> dayName;
 	private ArrayList<File> dayIcon;
 	private ArrayList<String> dayHigh;
@@ -28,7 +29,7 @@ public class WeatherContainer {
 		hourTemp=new ArrayList<String>(numDays);
 		hourSumm=new ArrayList<String>(numDays);
 	}
-	
+
 	public void addDay(String dayName, File dayIcon, String dayHigh, String dayLow) {
 		if(numDays>=MainController.NUM_DAILY_WEATHER)
 			throw new BufferOverflowException();
@@ -38,7 +39,7 @@ public class WeatherContainer {
 		this.dayLow.add(dayLow);
 		numDays++;
 	}
-	
+
 	public void addHour(String hourTime, File hourIcon, String hourTemp, String hourSumm) {
 		if(numHours>=MainController.NUM_HOURLY_WEATHER)
 			throw new BufferOverflowException();
@@ -48,51 +49,51 @@ public class WeatherContainer {
 		this.hourSumm.add(hourSumm);
 		numHours++;
 	}
-	
+
 	public void addSummary(String summary) {
 		this.summary=summary;
 	}
-	
+
 	public int getNumDays() {
 		return numDays;
 	}
-	
+
 	public String getDayName(int i) {
 		return dayName.get(i);
 	}
-	
+
 	public File getDayIcon(int i) {
 		return dayIcon.get(i);
 	}
-	
+
 	public String getDayHigh(int i) {
 		return dayHigh.get(i);
 	}
-	
+
 	public String getDayLow(int i) {
 		return dayLow.get(i);
 	}
-	
+
 	public int getNumHours() {
 		return numHours;
 	}
-	
+
 	public String getHourTime(int i) {
 		return hourTime.get(i);
 	}
-	
+
 	public File getHourIcon(int i) {
 		return hourIcon.get(i);
 	}
-	
+
 	public String getHourTemp(int i) {
 		return hourTemp.get(i);
 	}
-	
+
 	public String getHourSumm(int i) {
 		return hourSumm.get(i);
 	}
-	
+
 	public String getSummary() {
 		return summary;
 	}

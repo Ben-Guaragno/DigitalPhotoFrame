@@ -39,29 +39,29 @@ public class Main extends Application {
 			primaryStage.setX(bounds.getMinX());
 			primaryStage.setY(bounds.getMinY());
 			primaryStage.setFullScreen(true);
-			
+
 			primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-			    @Override
-			    public void handle(@SuppressWarnings("unused") WindowEvent t) {
-			        Platform.exit();
-			        System.exit(0);
-			    }
+				@Override
+				public void handle(@SuppressWarnings("unused") WindowEvent t) {
+					Platform.exit();
+					System.exit(0);
+				}
 			});
-			
+
 			primaryStage.show();
-			
+
 			List<String> args=getParameters().getRaw();
 			String configFile;
 			if(args.size()==0)
 				configFile=null;
 			else
 				configFile=args.get(0);
-			
+
 			SettingsLoader sl=new SettingsLoader(configFile);
-			
+
 			@SuppressWarnings("unused")
 			Controller c=new Controller(mainController, sl);
-			
+
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

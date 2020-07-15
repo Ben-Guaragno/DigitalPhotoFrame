@@ -39,8 +39,6 @@ public class MainController {
 	private Label summaryLabel;
 
 	public void initialize() {
-//		imageViewer.setImage(new Image(new File("photos/space crop.png").toURI().toString()));
-//		alignImage(imageViewer, false);
 	}
 
 	public void setDateLabel(String s) {
@@ -66,7 +64,7 @@ public class MainController {
 					setHourWeather(i, wc);
 				}
 				setWeatherSummary(wc);
-				
+
 				setDailyBackgroundRect();
 				setHourlyBackgroundRect();
 				setSummaryBackgroundRect();
@@ -125,18 +123,18 @@ public class MainController {
 		lHigh.setText(wc.getDayHigh(i)+DEGREE_SYMBOL);
 		lLow.setText(wc.getDayLow(i)+DEGREE_SYMBOL);
 	}
-	
+
 	private void setHourWeather(int i, WeatherContainer wc) {
 		ObservableList<Node> hourlyList=hourlyGrid.getChildrenUnmodifiable();
 		Label lTime=(Label) hourlyList.get(i*3);
 		ImageView iv=(ImageView) hourlyList.get(i*3+1);
 		Label lTempSumm=(Label) hourlyList.get(i*3+2);
-		
+
 		lTime.setText(wc.getHourTime(i));
 		iv.setImage(new Image(wc.getHourIcon(i).toURI().toString()));
 		lTempSumm.setText(wc.getHourTemp(i)+DEGREE_SYMBOL+" "+wc.getHourSumm(i));
 	}
-	
+
 	private void setWeatherSummary(WeatherContainer wc) {
 		String summ=wc.getSummary();
 		summaryLabel.setText(summ);
@@ -146,22 +144,20 @@ public class MainController {
 		double height=dailyWeatherHBox.getHeight();
 		double width=dailyWeatherHBox.prefWidth(height);
 		dailyBackgroundRectangle.setWidth(width);
-//		dailyBackgroundRectangle.setHeight(height);
 	}
-	
+
 	private void setHourlyBackgroundRect() {
 		double height=hourlyGrid.getHeight();
 		double width=hourlyGrid.prefWidth(height);
 		hourlyBackgroundRectangle.setWidth(width);
-//		hourlyBackgroundRectangle.setHeight(height);
 	}
-	
+
 	private void setSummaryBackgroundRect() {
 		double height=summaryLabel.getHeight();
 		double width=summaryLabel.prefWidth(height);
 		summaryBackgroundRectangle.setWidth(width+10);
 	}
-	
+
 	private void setDateBackgroundRect() {
 		double height=dateLabel.getHeight();
 		double width=dateLabel.prefWidth(height);
