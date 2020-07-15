@@ -54,7 +54,7 @@ public class EnergyManager {
 				int end=s.indexOf(',');
 				s=s.substring(0, end);
 			}
-			
+
 			//Convert to double and round
 			double kW=Double.parseDouble(s)/1000;
 			//If energy is negligible (less than 100 watts) return null

@@ -13,8 +13,11 @@ public class SettingsLoader {
 	private static final String PHOTO_DEFAULT="5";
 	private static final String WEATHER_DEFAULT="1";
 	private static final String DATE_DEFAULT="60";
+	private static final String ENERGY_DEFAULT="5";
+	private static final String IP_DEFAULT="127.0.0.1";
 	private static final boolean ENABLE_DATE_DEFAULT=true;
 	private static final boolean PHOTO_CENTER_ALIGN=true;
+	private static final boolean ENABLE_ENERGY_DEFAULT=false;
 	private Properties props;
 
 	public SettingsLoader(String configFileString) {
@@ -105,6 +108,33 @@ public class SettingsLoader {
 			System.err.println("WARNING: photoAlign config value not true/false. Defaulting to "+PHOTO_CENTER_ALIGN+".");
 			return PHOTO_CENTER_ALIGN;
 		}
+	}
+
+	public int getEnergyUpdate() {
+		String s=props.getProperty("energyUpdate", ENERGY_DEFAULT);
+		try {
+			int x=Integer.parseInt(s)*60000;
+			return x;
+		}catch(Exception e) {
+			System.err.println("WARNING: energyUpdate config value not a number. Defaulting to "+ENERGY_DEFAULT+".");
+			return Integer.parseInt(ENERGY_DEFAULT)*1000;
+		}
+	}
+
+	public boolean getIsEnergyEnabled() {
+		String s=props.getProperty("enableEnergy", ENABLE_ENERGY_DEFAULT+"");
+		if(s.equalsIgnoreCase("true")) {
+			return true;
+		}else if(s.equalsIgnoreCase("false")) {
+			return false;
+		}else {
+			System.err.println("WARNING: enableEnergy config value not true/false. Defaulting to "+ENABLE_ENERGY_DEFAULT+".");
+			return ENABLE_ENERGY_DEFAULT;
+		}
+	}
+
+	public String getIP() {
+		return props.getProperty("ip", IP_DEFAULT);
 	}
 
 }
