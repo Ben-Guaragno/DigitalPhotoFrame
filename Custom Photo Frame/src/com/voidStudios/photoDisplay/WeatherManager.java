@@ -177,8 +177,8 @@ public class WeatherManager {
 				sdf = new SimpleDateFormat("h a");
 				hourTime = sdf.format(date);
 			} catch (ParseException e) {
-				//TODO Auto-generated catch block
-				e.printStackTrace();
+				//Failed to parse time
+				hourTime="";
 			}
 			String icon=ht.get("icon");
 			icon=icon.substring(1, icon.length()-1);

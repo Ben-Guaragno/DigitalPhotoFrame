@@ -4,7 +4,6 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -17,8 +16,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
-
-import javax.imageio.ImageIO;
 
 public class ImageDirectory {
 
@@ -44,17 +41,19 @@ public class ImageDirectory {
 		try {
 			dirWatcher=FileSystems.getDefault().newWatchService();
 		}catch(IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//Failed to create a watch service
+			System.err.println("ERROR: Failed to create a filesystem WatchService");
+			return;
 		}
 
-		(new WatcherThread(dirWatcher)).start();
 		try {
 			imageDirPath.register(dirWatcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
 		}catch(IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//Failed to register WatchService on the photo directory
+			System.err.println("ERROR: Failed to register WatchService for photo directory");
+			return;
 		}
+		(new WatcherThread(dirWatcher)).start();
 
 		//Get the initial list of images in the directory
 		sync();
@@ -81,16 +80,6 @@ public class ImageDirectory {
 				}
 
 				try {
-					//TODO test on Linux environment
-					boolean swap=false;
-					if(swap) {
-						//Resource intensive, based on file contents
-						BufferedImage pic=ImageIO.read(f);
-						if(pic!=null)
-							imageFiles.add(f);
-						else
-							System.err.println(new Date()+": Unreadable file: "+f);
-					}else {
 						//Fast, based off of extension exclusively
 						String mimetype=Files.probeContentType(f.toPath());
 						String type=null;
@@ -101,11 +90,9 @@ public class ImageDirectory {
 							imageFiles.add(f);
 						else
 							System.err.println(new Date()+": Unreadable file: "+f);
-
-					}
 				}catch(IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					//Could not read file to determine mimetype
+					System.err.println(new Date()+": Cannot open file: "+f);
 				}
 			}
 		}
@@ -160,6 +147,7 @@ public class ImageDirectory {
 		public void run() {
 			try {
 				while(true) {
+					System.out.println("yeet");
 					WatchKey key;
 					key=dirWatcher.take();
 					//Ensures events are removed from the queue
@@ -167,13 +155,11 @@ public class ImageDirectory {
 					if(key.isValid())
 						sync();
 
-					if(!key.reset()) {
-						//TODO key no longer valid
-					}
+					key.reset();
 				}
 			}catch(InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				//Interrupted while waiting for new key
+				System.err.println(new Date()+": ERROR: Interrupted while waiting for a watch key");
 			}
 		}
 	}
