@@ -1,80 +1,74 @@
 package com.voidStudios.photoDisplay;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.Scanner;
-import com.voidStudios.photoDisplay.threads.DateThread;
-import com.voidStudios.photoDisplay.threads.PhotoThread;
-import com.voidStudios.photoDisplay.threads.WeatherThread;
+import java.util.Date;
+import java.util.List;
 
-public class Main{
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
+import javafx.stage.Screen;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import javafx.scene.Cursor;
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
+
+public class Main extends Application {
+
+	@Override
+	public void start(Stage primaryStage) {
+		try {
+			FXMLLoader loader=new FXMLLoader(getClass().getResource("Main.fxml"));
+			BorderPane root=(BorderPane) loader.load();
+			MainController mainController=loader.getController();
+			Scene scene=new Scene(root, 1920, 1080);
+			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			scene.setCursor(Cursor.NONE);
+			primaryStage.setScene(scene);
+			primaryStage.setResizable(false);
+			ObservableList<Screen> screens=Screen.getScreens();
+			Rectangle2D bounds;
+			if(screens.size()==1) {
+				bounds=screens.get(0).getVisualBounds();
+			}else {
+				bounds=screens.get(1).getVisualBounds();
+			}
+			primaryStage.setX(bounds.getMinX());
+			primaryStage.setY(bounds.getMinY());
+			primaryStage.setFullScreen(true);
+			
+			primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			    @Override
+			    public void handle(@SuppressWarnings("unused") WindowEvent t) {
+			        Platform.exit();
+			        System.exit(0);
+			    }
+			});
+			
+			primaryStage.show();
+			
+			List<String> args=getParameters().getRaw();
+			String configFile;
+			if(args.size()==0)
+				configFile=null;
+			else
+				configFile=args.get(0);
+			
+			SettingsLoader sl=new SettingsLoader(configFile);
+			
+			@SuppressWarnings("unused")
+			Controller c=new Controller(mainController, sl);
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	public static void main(String[] args) {
-		//Read outputs from config file (specified in command line)
-		//All inputs assumed to be minutes
-			//well... not right now...
-		HashMap<String,String> config=readConfig(args);
-		
-		IconLoader iconLoader=new IconLoader();
-		ImageDirectory imageDirectory=new ImageDirectory("./photos");
-		DataController data=new DataController(imageDirectory,iconLoader);
-		View view=new View(data);
-		data.updateView(view);
-
-		PhotoThread photoThread=new PhotoThread(Integer.parseInt(config.get("photoUpdate")), data);
-		DateThread dateThread=new DateThread(minToMilli(Integer.parseInt(config.get("dateUpdate"))),data);
-		WeatherThread weatherThread=new WeatherThread(minToMilli(Integer.parseInt(config.get("weatherUpdate"))), data, config.get("apiKey"), config.get("lat"), config.get("lon"));
-		photoThread.start();
-		dateThread.start();
-		weatherThread.start();
-		
-		@SuppressWarnings("unused")
-		Controller c=new Controller(view);
-	}
-
-	private static int minToMilli(int min) {
-		return min*60*1000;
-	}
-	
-	private static HashMap<String,String> readConfig(String[] args) {
-		HashMap<String,String> config=new HashMap<String,String>();
-		config.put("photoUpdate", "5000");
-		config.put("dateUpdate", "60");
-		config.put("weatherUpdate", "10");
-		config.put("apiKey", null);
-		config.put("lat", null);
-		config.put("lon", null);
-		
-		if(args.length<1)
-			return config;
-		Scanner sc;
-		try {
-			sc=new Scanner(new File(args[0]));
-		} catch (FileNotFoundException e) {
-			System.out.println("Error: Config not found");
-			return config;
-		}
-		
-		
-		while(sc.hasNextLine()) {
-			String s=sc.nextLine();
-			int x=s.indexOf('=');
-			if(x==-1) {
-				System.out.println("Error: Invalid config line: "+s);
-				break;
-			}
-			String tag=s.substring(0, x);
-			String valS=s.substring(x+1);
-
-			if(config.containsKey(tag)){
-				config.replace(tag, valS);
-			}else{
-				System.out.println("Error: Unrecognized tag: "+tag);
-			}
-		}
-		
-		sc.close();
-		return config;
+		System.out.println(new Date()+": Initializing JFX Photo Frame.");
+		launch(args);
 	}
 }
