@@ -43,6 +43,10 @@ public class MainController {
 	private HBox energyHBox;
 
 	public void initialize() {
+		//Set energy icon to the correct image
+		File f=new File("./Icons/Energy.png");
+		ImageView iv=(ImageView) energyHBox.getChildrenUnmodifiable().get(0);
+		iv.setImage(new Image(f.toURI().toString()));
 	}
 
 	public void setDateLabel(String s) {

@@ -307,9 +307,6 @@
                   <HBox fx:id="energyHBox" alignment="BOTTOM_LEFT" fillHeight="false">
                      <children>
                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" visible="false">
-                           <image>
-                              <Image url="@../../../../Icons/Energy.png" />
-                           </image>
                            <HBox.margin>
                               <Insets bottom="5.0" />
                            </HBox.margin>
