@@ -54,13 +54,12 @@ public class ImageDirectory {
 			return;
 		}
 		(new WatcherThread(dirWatcher)).start();
-
-		//Get the initial list of images in the directory
-		sync();
 	}
 
 	private void sync() {
 		imageFiles.clear();
+		//Ensure imageFiles is not permanently grown by a large file batch
+		imageFiles=new Vector<File>();
 		imageIndex=0;
 
 		File[] files=imageDirFile.listFiles();
@@ -145,6 +144,8 @@ public class ImageDirectory {
 
 		@Override
 		public void run() {
+			//Get an initial list of images before watcher is loaded
+			sync();
 			try {
 				while(true) {
 					WatchKey key;

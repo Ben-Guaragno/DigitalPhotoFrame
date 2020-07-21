@@ -59,8 +59,8 @@ public class Main extends Application {
 
 			SettingsLoader sl=new SettingsLoader(configFile);
 
-			@SuppressWarnings("unused")
 			Controller c=new Controller(mainController, sl);
+			c.start();
 
 		}catch(Exception e) {
 			e.printStackTrace();

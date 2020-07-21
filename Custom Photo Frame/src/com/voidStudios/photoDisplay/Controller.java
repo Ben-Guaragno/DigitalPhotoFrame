@@ -26,12 +26,11 @@ public class Controller {
 		iDir=new ImageDirectory("photos", this);
 		weatherManager=new WeatherManager(sloader.getAPIKey(), sloader.getLat(), sloader.getLon());
 		energyManager=new EnergyManager(sloader.getIP());
-
-		start();
 	}
 
 	public void pause() {
 		timer.cancel();
+		timer.purge();
 	}
 
 	private long calcStartTime(int desiredTime) {
@@ -54,7 +53,7 @@ public class Controller {
 	public void start() {
 		//Ensures the multiple timers cannot be started
 		if(timer!=null)
-			timer.cancel();
+			pause();
 
 		long startTime;
 		int desiredTime;
