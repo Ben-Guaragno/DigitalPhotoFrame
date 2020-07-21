@@ -73,31 +73,35 @@ public class MainController {
 	}
 
 	public void setImage(File f, boolean center) {
-		imageViewer.setImage(new Image(f.toURI().toString()));
+		Platform.runLater(new Runnable() {
 
-		alignImage(imageViewer, center);
+			@Override
+			public void run() {
+				imageViewer.setImage(null);
+				String URIString=f.toURI().toString();
+				Image image=new Image(URIString, 1920, 1080, true, true);
+
+				imageViewer.setImage(image);
+				
+				alignImage(imageViewer, center, image);
+			}
+		});
 	}
 
-	private void alignImage(ImageView imageView, boolean center) {
-		Image img=imageView.getImage();
+	private void alignImage(ImageView imageView, boolean center, Image img) {
 		if(img!=null) {
-			double w=0;
-			double h=0;
-
 			double ratioX=imageView.getFitWidth()/img.getWidth();
 			double ratioY=imageView.getFitHeight()/img.getHeight();
 
 			double reducCoeff=0;
-			if(ratioX>=ratioY) {
+			if(ratioX>=ratioY)
 				reducCoeff=ratioY;
-			}else {
+			else
 				reducCoeff=ratioX;
-			}
+			
 
-			w=img.getWidth()*reducCoeff;
-			h=img.getHeight()*reducCoeff;
-
-//			System.out.println(w+" "+h);
+			double w=img.getWidth()*reducCoeff;
+			double h=img.getHeight()*reducCoeff;
 
 			if(center)
 				imageView.setX((imageView.getFitWidth()-w)/2);
