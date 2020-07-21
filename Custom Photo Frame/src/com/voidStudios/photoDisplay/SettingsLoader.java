@@ -54,7 +54,7 @@ public class SettingsLoader {
 	}
 
 	public int getPhotoUpdate() {
-		String s=props.getProperty("photoUpdate", PHOTO_DEFAULT);
+		String s=props.getProperty("photoUpdateSec", PHOTO_DEFAULT);
 		try {
 			int x=Integer.parseInt(s)*1000;
 			return x;
@@ -65,7 +65,7 @@ public class SettingsLoader {
 	}
 
 	public int getWeatherUpdate() {
-		String s=props.getProperty("weatherUpdate", WEATHER_DEFAULT);
+		String s=props.getProperty("weatherUpdateMin", WEATHER_DEFAULT);
 		try {
 			int x=Integer.parseInt(s)*60000;
 			return x;
@@ -76,7 +76,7 @@ public class SettingsLoader {
 	}
 
 	public int getDateUpdate() {
-		String s=props.getProperty("dateUpdate", DATE_DEFAULT);
+		String s=props.getProperty("dateUpdateMin", DATE_DEFAULT);
 		try {
 			int x=Integer.parseInt(s)*60000;
 			return x;

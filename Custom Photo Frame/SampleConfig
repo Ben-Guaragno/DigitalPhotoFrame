@@ -1,6 +1,6 @@
-photoUpdate=5
-weatherUpdate=1
-dateUpdate=60
+photoUpdateSec=5
+weatherUpdateMin=10
+dateUpdateMin=60
 enableDate=true
 apiKey=abcdefg1234567
 lat=0
