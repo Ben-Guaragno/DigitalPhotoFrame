@@ -16,6 +16,7 @@ public class Controller {
 	private SettingsLoader sloader;
 	private WeatherManager weatherManager;
 	private ImageDirectory iDir;
+	private EnergyManager energyManager;
 
 	public Controller(MainController mainController, SettingsLoader sloader) {
 		this.mainController=mainController;
@@ -23,8 +24,8 @@ public class Controller {
 		dateFormat=new SimpleDateFormat("MMMM d");
 
 		iDir=new ImageDirectory("photos", this);
-
 		weatherManager=new WeatherManager(sloader.getAPIKey(), sloader.getLat(), sloader.getLon());
+		energyManager=new EnergyManager(sloader.getIP());
 	}
 
 	public void pause() {
@@ -43,7 +44,7 @@ public class Controller {
 
 		//Ensure the scheduled time is not in the future
 		//Ensures that the task will be immediately run at startup
-		if(finalTime>currentTime)
+		while(finalTime>currentTime)
 			finalTime-=desiredTime;
 
 		return finalTime;
@@ -63,7 +64,6 @@ public class Controller {
 		tmp=new TimerTask() {
 			@Override
 			public void run() {
-//				System.out.println(new Date()+": Photo Task");
 				File f=iDir.nextFile();
 				if(f!=null)
 					mainController.setImage(f, sloader.getPhotoCenterAlign());
@@ -77,14 +77,12 @@ public class Controller {
 		tmp=new TimerTask() {
 			@Override
 			public void run() {
-//				System.out.println(new Date()+": Weather Task");
 				WeatherContainer wc=weatherManager.getWeather();
 				if(wc!=null)
 					mainController.setWeather(wc);
 			}
 		};
 		desiredTime=sloader.getWeatherUpdate();
-//		desiredTime=5000;
 		startTime=calcStartTime(desiredTime);
 		timer.scheduleAtFixedRate(tmp, new Date(startTime), desiredTime);
 
@@ -95,11 +93,23 @@ public class Controller {
 				public void run() {
 					String dateS=dateFormat.format(new Date());
 					mainController.setDateLabel(dateS);
-
-//					System.out.println(new Date()+": Date Task");
 				}
 			};
 			desiredTime=sloader.getDateUpdate();
+			startTime=calcStartTime(desiredTime);
+			timer.scheduleAtFixedRate(tmp, new Date(startTime), desiredTime);
+		}
+
+		//Energy
+		if(sloader.getIsEnergyEnabled()) {
+			tmp=new TimerTask() {
+				@Override
+				public void run() {
+					String s=energyManager.getEnergy();
+					mainController.setEnergy(s);
+				}
+			};
+			desiredTime=sloader.getEnergyUpdate();
 			startTime=calcStartTime(desiredTime);
 			timer.scheduleAtFixedRate(tmp, new Date(startTime), desiredTime);
 		}

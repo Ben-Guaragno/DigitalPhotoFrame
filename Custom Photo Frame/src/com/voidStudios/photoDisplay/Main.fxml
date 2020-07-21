@@ -280,21 +280,6 @@
          </children>
       </Pane>
    </center>
-   <bottom>
-      <StackPane alignment="BOTTOM_LEFT" BorderPane.alignment="CENTER">
-         <children>
-            <Rectangle fx:id="summaryBackgroundRectangle" height="38.0" opacity="0.4" smooth="false" stroke="BLACK" strokeMiterLimit="0.0" strokeType="OUTSIDE" strokeWidth="0.0" />
-            <Label fx:id="summaryLabel" textFill="WHITE">
-               <font>
-                  <Font name="Times New Roman" size="30.0" />
-               </font>
-               <StackPane.margin>
-                  <Insets bottom="3.0" left="5.0" />
-               </StackPane.margin>
-            </Label>
-         </children>
-      </StackPane>
-   </bottom>
    <right>
       <StackPane alignment="TOP_RIGHT" BorderPane.alignment="CENTER">
          <children>
@@ -313,4 +298,51 @@
          </BorderPane.margin>
       </StackPane>
    </right>
+   <bottom>
+      <VBox alignment="BOTTOM_LEFT" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="BOTTOM_LEFT">
+         <children>
+            <StackPane alignment="BOTTOM_LEFT">
+               <children>
+                  <Rectangle fx:id="energyBackgroundRectangle" height="30.0" opacity="0.4" smooth="false" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" />
+                  <HBox fx:id="energyHBox" alignment="BOTTOM_LEFT" fillHeight="false">
+                     <children>
+                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                           <image>
+                              <Image url="@../../../../Icons/Energy.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets bottom="5.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Label textFill="WHITE">
+                           <font>
+                              <Font name="Times New Roman" size="30.0" />
+                           </font>
+                           <padding>
+                              <Insets left="4.0" />
+                           </padding>
+                        </Label>
+                     </children>
+                     <StackPane.margin>
+                        <Insets bottom="-4.0" />
+                     </StackPane.margin>
+                  </HBox>
+               </children>
+            </StackPane>
+            <StackPane alignment="BOTTOM_LEFT">
+               <children>
+                  <Rectangle fx:id="summaryBackgroundRectangle" height="38.0" opacity="0.4" smooth="false" stroke="BLACK" strokeMiterLimit="0.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+                  <Label fx:id="summaryLabel" textFill="WHITE">
+                     <font>
+                        <Font name="Times New Roman" size="30.0" />
+                     </font>
+                     <StackPane.margin>
+                        <Insets bottom="3.0" left="5.0" />
+                     </StackPane.margin>
+                  </Label>
+               </children>
+            </StackPane>
+         </children>
+      </VBox>
+   </bottom>
 </BorderPane>

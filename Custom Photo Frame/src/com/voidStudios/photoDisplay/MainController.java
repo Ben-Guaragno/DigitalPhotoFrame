@@ -37,6 +37,10 @@ public class MainController {
 	private GridPane hourlyGrid;
 	@FXML
 	private Label summaryLabel;
+	@FXML
+	private Rectangle energyBackgroundRectangle;
+	@FXML
+	private HBox energyHBox;
 
 	public void initialize() {
 	}
@@ -84,6 +88,27 @@ public class MainController {
 				imageViewer.setImage(image);
 				
 				alignImage(imageViewer, center, image);
+			}
+		});
+	}
+
+	public void setEnergy(String s) {
+		Platform.runLater(new Runnable() {
+
+			@Override
+			public void run() {
+				ImageView energyIcon=(ImageView) energyHBox.getChildrenUnmodifiable().get(0);
+				Label energyLabel=(Label) energyHBox.getChildrenUnmodifiable().get(1);
+				if(s!=null) {
+					energyLabel.setText(s);
+					energyIcon.setVisible(true);
+					energyBackgroundRectangle.setVisible(true);
+					setEnergyBackgroundRect();
+				}else {
+					energyIcon.setVisible(false);
+					energyLabel.setVisible(false);
+					energyBackgroundRectangle.setVisible(false);
+				}
 			}
 		});
 	}
@@ -168,6 +193,14 @@ public class MainController {
 		height=dateLabel.prefHeight(width);
 		dateBackgroundRectangle.setWidth(width+4);
 		dateBackgroundRectangle.setHeight(height+4);
+	}
+
+	private void setEnergyBackgroundRect() {
+		Label energyLabel=(Label) energyHBox.getChildrenUnmodifiable().get(1);
+		double height=energyLabel.getHeight();
+		double imageWidth=((ImageView) energyHBox.getChildrenUnmodifiable().get(0)).getFitWidth();
+		double width=energyLabel.prefWidth(height);
+		energyBackgroundRectangle.setWidth(width+imageWidth+5);
 	}
 
 }
