@@ -31,6 +31,7 @@ public class Controller {
 	public void pause() {
 		timer.cancel();
 		timer.purge();
+		timer=null;
 	}
 
 	private long calcStartTime(int desiredTime) {
@@ -58,10 +59,10 @@ public class Controller {
 		long startTime;
 		int desiredTime;
 		timer=new Timer();
-		TimerTask tmp;
+		TimerTask task;
 
 		//Photo
-		tmp=new TimerTask() {
+		task=new TimerTask() {
 			@Override
 			public void run() {
 				File f=iDir.nextFile();
@@ -71,10 +72,10 @@ public class Controller {
 		};
 		desiredTime=sloader.getPhotoUpdate();
 		startTime=calcStartTime(desiredTime);
-		timer.scheduleAtFixedRate(tmp, new Date(startTime), desiredTime);
+		timer.scheduleAtFixedRate(task, new Date(startTime), desiredTime);
 
 		//Weather
-		tmp=new TimerTask() {
+		task=new TimerTask() {
 			@Override
 			public void run() {
 				WeatherContainer wc=weatherManager.getWeather();
@@ -84,11 +85,11 @@ public class Controller {
 		};
 		desiredTime=sloader.getWeatherUpdate();
 		startTime=calcStartTime(desiredTime);
-		timer.scheduleAtFixedRate(tmp, new Date(startTime), desiredTime);
+		timer.scheduleAtFixedRate(task, new Date(startTime), desiredTime);
 
 		//Date
 		if(sloader.getIsDateEnabled()) {
-			tmp=new TimerTask() {
+			task=new TimerTask() {
 				@Override
 				public void run() {
 					String dateS=dateFormat.format(new Date());
@@ -97,12 +98,12 @@ public class Controller {
 			};
 			desiredTime=sloader.getDateUpdate();
 			startTime=calcStartTime(desiredTime);
-			timer.scheduleAtFixedRate(tmp, new Date(startTime), desiredTime);
+			timer.scheduleAtFixedRate(task, new Date(startTime), desiredTime);
 		}
 
 		//Energy
 		if(sloader.getIsEnergyEnabled()) {
-			tmp=new TimerTask() {
+			task=new TimerTask() {
 				@Override
 				public void run() {
 					String s=energyManager.getEnergy();
@@ -111,7 +112,7 @@ public class Controller {
 			};
 			desiredTime=sloader.getEnergyUpdate();
 			startTime=calcStartTime(desiredTime);
-			timer.scheduleAtFixedRate(tmp, new Date(startTime), desiredTime);
+			timer.scheduleAtFixedRate(task, new Date(startTime), desiredTime);
 		}
 	}
 }

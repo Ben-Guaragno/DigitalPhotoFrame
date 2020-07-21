@@ -50,69 +50,53 @@ public class MainController {
 	}
 
 	public void setDateLabel(String s) {
-		Platform.runLater(new Runnable() {
-
-			@Override
-			public void run() {
-				dateLabel.setText(s);
-				setDateBackgroundRect();
-			}
+		Platform.runLater(() -> {
+			dateLabel.setText(s);
+			setDateBackgroundRect();
 		});
 	}
 
 	public void setWeather(WeatherContainer wc) {
-		Platform.runLater(new Runnable() {
-
-			@Override
-			public void run() {
-				for(int i=0; i<wc.getNumDays(); i++) {
-					setDayWeather(i, wc);
-				}
-				for(int i=0; i<wc.getNumHours(); i++) {
-					setHourWeather(i, wc);
-				}
-				setWeatherSummary(wc);
-
-				setDailyBackgroundRect();
-				setHourlyBackgroundRect();
-				setSummaryBackgroundRect();
+		Platform.runLater(() -> {
+			for(int i=0; i<wc.getNumDays(); i++) {
+				setDayWeather(i, wc);
 			}
+			for(int i=0; i<wc.getNumHours(); i++) {
+				setHourWeather(i, wc);
+			}
+			setWeatherSummary(wc);
+
+			setDailyBackgroundRect();
+			setHourlyBackgroundRect();
+			setSummaryBackgroundRect();
 		});
 	}
 
 	public void setImage(File f, boolean center) {
-		Platform.runLater(new Runnable() {
+		Platform.runLater(() -> {
+			imageViewer.setImage(null);
+			String URIString=f.toURI().toString();
+			Image image=new Image(URIString, 1920, 1080, true, true);
 
-			@Override
-			public void run() {
-				imageViewer.setImage(null);
-				String URIString=f.toURI().toString();
-				Image image=new Image(URIString, 1920, 1080, true, true);
+			imageViewer.setImage(image);
 
-				imageViewer.setImage(image);
-				
-				alignImage(imageViewer, center, image);
-			}
+			alignImage(imageViewer, center, image);
 		});
 	}
 
 	public void setEnergy(String s) {
-		Platform.runLater(new Runnable() {
-
-			@Override
-			public void run() {
-				ImageView energyIcon=(ImageView) energyHBox.getChildrenUnmodifiable().get(0);
-				Label energyLabel=(Label) energyHBox.getChildrenUnmodifiable().get(1);
-				if(s!=null) {
-					energyLabel.setText(s);
-					energyIcon.setVisible(true);
-					energyBackgroundRectangle.setVisible(true);
-					setEnergyBackgroundRect();
-				}else {
-					energyIcon.setVisible(false);
-					energyLabel.setVisible(false);
-					energyBackgroundRectangle.setVisible(false);
-				}
+		Platform.runLater(() -> {
+			ImageView energyIcon=(ImageView) energyHBox.getChildrenUnmodifiable().get(0);
+			Label energyLabel=(Label) energyHBox.getChildrenUnmodifiable().get(1);
+			if(s!=null) {
+				energyLabel.setText(s);
+				energyIcon.setVisible(true);
+				energyBackgroundRectangle.setVisible(true);
+				setEnergyBackgroundRect();
+			}else {
+				energyIcon.setVisible(false);
+				energyLabel.setVisible(false);
+				energyBackgroundRectangle.setVisible(false);
 			}
 		});
 	}
@@ -127,7 +111,6 @@ public class MainController {
 				reducCoeff=ratioY;
 			else
 				reducCoeff=ratioX;
-			
 
 			double w=img.getWidth()*reducCoeff;
 			double h=img.getHeight()*reducCoeff;
