@@ -156,6 +156,9 @@ public class ImageDirectory {
 						sync();
 
 					key.reset();
+					
+					//Don't excessively sync when multiple files are changing
+					wait(5000);
 				}
 			}catch(InterruptedException e) {
 				//Interrupted while waiting for new key
