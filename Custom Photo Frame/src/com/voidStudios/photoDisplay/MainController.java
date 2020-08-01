@@ -47,6 +47,7 @@ public class MainController {
 		File f=new File("./Icons/Energy.png");
 		ImageView iv=(ImageView) energyHBox.getChildrenUnmodifiable().get(0);
 		iv.setImage(new Image(f.toURI().toString()));
+		iv.setVisible(false);
 	}
 
 	public void setDateLabel(String s) {
@@ -91,6 +92,7 @@ public class MainController {
 			if(s!=null) {
 				energyLabel.setText(s);
 				energyIcon.setVisible(true);
+				energyLabel.setVisible(true);
 				energyBackgroundRectangle.setVisible(true);
 				setEnergyBackgroundRect();
 			}else {
