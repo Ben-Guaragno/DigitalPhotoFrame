@@ -38,7 +38,6 @@ public class SettingsLoader {
 		}catch(IOException e) {
 			System.err.println("WARNING: Configuration Input Stream failed to close cleanly.");
 		}
-
 	}
 
 	public String getLat() {

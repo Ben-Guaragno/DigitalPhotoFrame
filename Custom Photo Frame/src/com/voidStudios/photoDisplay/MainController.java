@@ -59,6 +59,8 @@ public class MainController {
 
 	public void setWeather(WeatherContainer wc) {
 		Platform.runLater(() -> {
+			setWeatherVisible(true);
+
 			for(int i=0; i<wc.getNumDays(); i++) {
 				setDayWeather(i, wc);
 			}
@@ -71,6 +73,19 @@ public class MainController {
 			setHourlyBackgroundRect();
 			setSummaryBackgroundRect();
 		});
+	}
+
+	public void hideWeather() {
+		setWeatherVisible(false);
+	}
+
+	private void setWeatherVisible(boolean visible) {
+		dailyWeatherHBox.setVisible(visible);
+		hourlyGrid.setVisible(visible);
+		dailyBackgroundRectangle.setVisible(visible);
+		hourlyBackgroundRectangle.setVisible(visible);
+		summaryBackgroundRectangle.setVisible(visible);
+		summaryLabel.setVisible(visible);
 	}
 
 	public void setImage(File f, boolean center) {

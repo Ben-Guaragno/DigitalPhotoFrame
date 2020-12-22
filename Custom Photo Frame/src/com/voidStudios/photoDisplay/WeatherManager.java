@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.NoRouteToHostException;
 import java.net.URL;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
@@ -36,10 +37,10 @@ public class WeatherManager {
 		iconLoader=new IconLoader();
 	}
 
-	public WeatherContainer getWeather() {
+	public WeatherContainer getWeather() throws NoRouteToHostException {
 		if(apiKey==null) {
 			System.err.println(new Date()+": No API Key provided, skipping weather fetch.");
-			return null;
+			throw new NoRouteToHostException("No API key provided");
 		}
 
 		ArrayList<Hashtable<String, String>> weatherDay, weatherHour;
