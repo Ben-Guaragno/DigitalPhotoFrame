@@ -1,5 +1,7 @@
 # Digital Photo Frame
-This project is intended to create a digital photo frame on a Raspberry Pi. This personal project includes other automation, notably syncing with a google drive account with Rclone for photos and automatically turning the display on and off at specified times.
+This project is intended to create a digital picture frame on a Raspberry Pi with rotating pictures and weather information. This personal project includes other automation, notably syncing with a google drive account with Rclone for photos, and scripts for automatically turning the display on and off at specified times.
+
+Additional integration with a Tesla Powerwall is [available](#tesla-powerwall-integration).
 
 ## Requirements
 
@@ -21,6 +23,18 @@ This project is intended to create a digital photo frame on a Raspberry Pi. This
 	1. The location of the JFX library: `--module-path <PATH-TO-JFX>/lib` (replace `<PATH-TO-JFX>` with the path to your JFX library)
 	1. The necessary modules: `--add-modules javafx.controls,javafx.fxml`
 	1. The location of a config file
+
+## Tesla Powerwall Integration
+**_IMPORTANT_: Functionality has been broken by Version 20.49**<br/>
+This update requires authentication to access the API page. I'm looking into how to obtain authentication to restore functionality.
+
+If you have a Powerwall (likely v2 required) which is configured to use your network as its primary connection type, its gateway can be used to retrieve the current power output of an attached solar installation. Visiting `<gateway-IP>/api/meters/solar` should display detailed information about the solar installation. My program specifically uses “instant_power,” which I understand to be the current wattage being produced. Adding the following to the config file will add a display for the current power output of the solar installation. If less than 100 watts are being produced, the energy display is hidden.
+	
+`enableEnergy=true` Enables the energy display
+<br/>
+`energyUpdate=1` Sets the energy update frequency in minutes
+<br/>
+`ip=<LOCAL-IP>` Sets the IP of the gateway
 
 <br/><br/>
 
