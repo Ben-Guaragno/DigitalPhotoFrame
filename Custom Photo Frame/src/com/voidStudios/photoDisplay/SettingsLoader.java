@@ -15,6 +15,7 @@ public class SettingsLoader {
 	private static final String DATE_DEFAULT="60";
 	private static final String ENERGY_DEFAULT="5";
 	private static final String IP_DEFAULT="127.0.0.1";
+	private static final String PASSWORD_DEFAULT="password";
 	private static final boolean ENABLE_DATE_DEFAULT=true;
 	private static final boolean PHOTO_CENTER_ALIGN=true;
 	private static final boolean ENABLE_ENERGY_DEFAULT=false;
@@ -134,6 +135,10 @@ public class SettingsLoader {
 
 	public String getIP() {
 		return props.getProperty("ip", IP_DEFAULT);
+	}
+
+	public String getPassword() {
+		return props.getProperty("password", PASSWORD_DEFAULT);
 	}
 
 }
