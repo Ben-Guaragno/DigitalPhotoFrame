@@ -55,7 +55,10 @@ public class EnergyManager {
 				return ret;
 			}catch(Exception e) {
 				//Check if server returns 403 unauthorized
-				if(e.getMessage().contains("Server returned HTTP response code: 403 for URL")) {
+				boolean is401=e.getMessage().contains("Server returned HTTP response code: 403 for URL");
+				//Check for 401, likely means cookies expired. Treat the same as a 403 (attempt to re-authenticate)
+				boolean is403=e.getMessage().contains("Server returned HTTP response code: 401 for URL");
+				if(is401 || is403) {
 					//Check if this is the second try
 					//(i.e. attempted to get a new cookie but server returned 403 still)
 					if(authRetry) {
@@ -160,7 +163,10 @@ public class EnergyManager {
 				for(String cookie : cookiesHeader) {
 					cManager.getCookieStore().add(null, HttpCookie.parse(cookie).get(0));
 				}
+				//System.out.println("COOKIE: Updated with "+cookiesHeader.size()+" cookies at "+new Date());
+				return;
 			}
+			System.out.println(new Date()+": Warning: Failed to update Powerwall authentication cookies");
 		}catch(Exception e) {
 			System.err.println(new Date()+": Warning: Failed to get authentication cookie with error: "+e.getMessage());
 		}
