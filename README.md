@@ -25,16 +25,16 @@ Additional integration with a Tesla Powerwall is [available](#tesla-powerwall-in
 	1. The location of a config file
 
 ## Tesla Powerwall Integration
-**_IMPORTANT_: Functionality has been broken by Version 20.49**<br/>
-This update requires authentication to access the API page. I'm looking into how to obtain authentication to restore functionality.
 
-If you have a Powerwall (likely v2 required) which is configured to use your network as its primary connection type, its gateway can be used to retrieve the current power output of an attached solar installation. Visiting `<gateway-IP>/api/meters/solar` should display detailed information about the solar installation. My program specifically uses “instant_power,” which I understand to be the current wattage being produced. Adding the following to the config file will add a display for the current power output of the solar installation. If less than 100 watts are being produced, the energy display is hidden.
+If you have a Powerwall (likely v2 required) which is configured to use your network as its primary connection type, its gateway can be used to retrieve the current power output of an attached solar installation. After authenticating, visiting `<gateway-IP>/api/meters/solar` should display detailed information about the solar installation. My program specifically uses “instant_power,” which I understand to be the current wattage being produced. Adding the following to the config file will add a display for the current power output of the solar installation. If less than 100 watts are being produced, the energy display is hidden. As of version 20.49, authentication is required for access to the Powerwall API. Currently the email field is not used, so only the password needs to be given.
 	
 `enableEnergy=true` Enables the energy display
 <br/>
 `energyUpdate=1` Sets the energy update frequency in minutes
 <br/>
 `ip=<LOCAL-IP>` Sets the IP of the gateway
+<br/>
+`password=<POWERWALL-PASSWORD>` Sets the Password for authentication with the Powerwall
 
 <br/><br/>
 

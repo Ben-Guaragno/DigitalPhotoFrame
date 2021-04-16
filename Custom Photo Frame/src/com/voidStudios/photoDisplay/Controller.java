@@ -26,7 +26,7 @@ public class Controller {
 
 		iDir=new ImageDirectory("photos", this);
 		weatherManager=new WeatherManager(sloader.getAPIKey(), sloader.getLat(), sloader.getLon());
-		energyManager=new EnergyManager(sloader.getIP());
+		energyManager=new EnergyManager(sloader.getIP(), sloader.getPassword());
 	}
 
 	public void pause() {
