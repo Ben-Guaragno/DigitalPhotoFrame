@@ -39,3 +39,5 @@ If you have a Powerwall (likely v2 required) which is configured to use your net
 <br/><br/>
 
 Weather is powered by Dark Sky: https://darksky.net/poweredby/
+<br/>
+Weather icons from [christiannaths](https://github.com/christiannaths)/[Climacons-Font](https://github.com/christiannaths/Climacons-Font) repo
