@@ -97,13 +97,20 @@ public class WeatherManager {
 		}
 		
 		//Load hourly weather into WC
-		values=values.getJSONObject(0).getJSONArray("hours");
+		JSONArray dayValues=values;
+		values=dayValues.getJSONObject(0).getJSONArray("hours");
 		SimpleDateFormat sdf=new SimpleDateFormat("H");
 		Date d=new Date();
 		int startHour=Integer.parseInt(sdf.format(d));
-		for(int i=startHour; i<MainController.NUM_HOURLY_WEATHER+startHour; i++) {
-			//FIXME day rolled over
-			if(i>23)break;
+		int i=startHour;
+		int iMax=MainController.NUM_HOURLY_WEATHER+startHour;
+		while(i<iMax) {
+			//Handle hourly weather rolling over into the next day
+			if(i>23) {
+				i=0;
+				values=dayValues.getJSONObject(1).getJSONArray("hours");
+				iMax=iMax-24;
+			}
 			JSONObject hourValues=values.getJSONObject(i);
 			
 			String time=hourValues.getString("datetime");
@@ -128,8 +135,8 @@ public class WeatherManager {
 			//TODO determine if this tag is the best analog to Dark Sky
 			String hourSumm=hourValues.getString("conditions");
 			
-			
 			wc.addHour(hourTime, hourIcon, hourTemp, hourSumm);
+			i++;
 		}
 
 		return wc;
