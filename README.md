@@ -38,4 +38,4 @@ If you have a Powerwall (likely v2 required) which is configured to use your net
 
 <br/><br/>
 
-Weather is powered by Dark Sky: https://darksky.net/poweredby/
+Weather is powered by Visual Crossing: https://www.visualcrossing.com/
