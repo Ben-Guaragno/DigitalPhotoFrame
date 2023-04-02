@@ -14,7 +14,7 @@ Additional integration with a Tesla Powerwall is [available](#tesla-powerwall-in
 1. Extract. Archive contains photoframeJFX.jar and an Icons folder.
 	1. Icons can be swapped by editing the images in Icons/
 1. Place images inside a directory named "photos" at the same level as the photoframe jar.
-1. Create a config file with information about timings of picture, weather, and date updates. Also include a Dark Sky API key and latitude/longitude for weather information.
+1. Create a config file with information about timings of picture, weather, and date updates. Also include a Visual Crossing API key and latitude/longitude for weather information.
 	1. See sample config for formatting
 	1. photoUpdateSec is in seconds, weatherUpdateMin and dateUpdateMin are in minutes
 	1. enableDate can be set to false to remove the date from the display
@@ -38,4 +38,4 @@ If you have a Powerwall (likely v2 required) which is configured to use your net
 
 <br/><br/>
 
-Weather is powered by Dark Sky: https://darksky.net/poweredby/
+Weather is powered by Visual Crossing: https://www.visualcrossing.com/
