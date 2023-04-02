@@ -8,8 +8,8 @@ import java.util.TimerTask;
 
 public class Controller {
 
-	private static final int ONE_HOUR_MILLIS=3600000;
-	private static final int OFFSET_FROM_HOUR=5000;
+	private static final int ONE_HOUR_MILLIS=1000*60*60;
+	private static final int OFFSET_FROM_HOUR=5000;	//5 seconds in milliseconds
 	private Timer timer;
 	private SimpleDateFormat dateFormat;
 	private MainController mainController;
@@ -52,7 +52,7 @@ public class Controller {
 	}
 
 	public void start() {
-		//Ensures the multiple timers cannot be started
+		//Ensures that multiple timers cannot be started
 		if(timer!=null)
 			pause();
 
