@@ -57,7 +57,10 @@ public class WeatherManager {
 		
 		WeatherContainer wc=new WeatherContainer();
 		
-		wc.addSummary(json.getJSONArray("days").getJSONObject(0).getString("description"));
+		String summary=json.getString("description");
+		if(summary.length()>1)
+			summary=summary.substring(0, summary.length()-1);
+		wc.addSummary(summary);
 		
 		//Load daily weather into WC
 		JSONArray values=json.getJSONArray("days");
@@ -79,6 +82,7 @@ public class WeatherManager {
 			wc.addDay(dayName, dayIcon, dayHigh, dayLow);
 		}
 		
+		//Load hourly weather into WC
 		values=values.getJSONObject(0).getJSONArray("hours");
 		SimpleDateFormat sdf=new SimpleDateFormat("H");
 		Date d=new Date();
@@ -128,7 +132,9 @@ public class WeatherManager {
 		s.append(lat+"%2C"+lon);
 		s.append("/");
 		s.append(dateBuilder());
-		s.append("?unitGroup=us&elements=datetime%2Cfeelslikemax%2Cfeelslikemin%2Cfeelslike%2Cconditions%2Cdescription%2Cicon&include=days%2Chours&key=");
+//		s.append("?unitGroup=us&elements=datetime%2Cfeelslikemax%2Cfeelslikemin%2Cfeelslike%2Cconditions%2Cdescription%2Cicon&include=days%2Chours&key=");
+		s.append("?unitGroup=us&elements=datetime%2CdatetimeEpoch%2Cfeelslikemax%2Cfeelslikemin%2Cfeelslike%2Cconditions%2Cdescription"
+				+ "%2Cicon&include=events%2Ccurrent%2Cdays%2Calerts%2Chours%2Cfcst&key=");
 		s.append(apiKey);
 		s.append("&contentType=json");
 		
