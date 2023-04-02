@@ -47,12 +47,11 @@ public class WeatherManager {
 			throw new IllegalArgumentException("No API key provided");
 		}
 		
-		//Java request syntax from Visual Crossing docs
+		//Java request syntax from Visual Crossing docs with added exception handling
 		HttpRequest request = HttpRequest.newBuilder()
 				.uri(buildURI())
 				.method("GET", HttpRequest.BodyPublishers.noBody()).build();
 		HttpResponse<String> response= null;
-				
 		try {
 			response=HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
 		}catch(IOException|InterruptedException e) {
@@ -62,8 +61,10 @@ public class WeatherManager {
 		
 		//Process request into a JSONObject
 		JSONObject json=new JSONObject(response.body());
+		
 		WeatherContainer wc=new WeatherContainer();
 		
+		//Load weather summary into WC
 		String summary=json.getString("description");
 		if(summary.length()>1)
 			summary=summary.substring(0, summary.length()-1);
@@ -132,7 +133,6 @@ public class WeatherManager {
 			Double hourTempDouble=hourValues.getDouble("feelslike");
 			String hourTemp=Math.round(hourTempDouble)+"";
 			
-			//TODO determine if this tag is the best analog to Dark Sky
 			String hourSumm=hourValues.getString("conditions");
 			
 			wc.addHour(hourTime, hourIcon, hourTemp, hourSumm);
