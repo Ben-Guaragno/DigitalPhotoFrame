@@ -1,7 +1,6 @@
 package com.voidStudios.photoDisplay;
 
 import java.io.File;
-import java.net.NoRouteToHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
@@ -83,7 +82,7 @@ public class Controller {
 					WeatherContainer wc=weatherManager.getWeather();
 					if(wc!=null)
 						mainController.setWeather(wc);
-				}catch(NoRouteToHostException e) {
+				}catch(Exception e) {	//TODO make this specific
 					mainController.hideWeather();
 				}
 			}

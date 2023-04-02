@@ -1,28 +1,23 @@
 package com.voidStudios.photoDisplay;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.NoRouteToHostException;
-import java.net.URL;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Hashtable;
-import java.util.TimeZone;
 
-import com.github.dvdme.ForecastIOLib.FIODaily;
-import com.github.dvdme.ForecastIOLib.FIOHourly;
-import com.github.dvdme.ForecastIOLib.ForecastIO;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class WeatherManager {
 
-	private static final int MAX_ERROR_COUNT=10;
 	private static String[] namesOfDays=DateFormatSymbols.getInstance().getShortWeekdays();
 	private String apiKey;
 	private String lat;
@@ -36,174 +31,131 @@ public class WeatherManager {
 
 		iconLoader=new IconLoader();
 	}
-
-	public WeatherContainer getWeather() throws NoRouteToHostException {
+	
+	//TODOL delete once testing is done
+	public static void main(String[] args) throws Exception {
+		System.out.println(new Date()+": Initializing JFX Photo Frame.");
+		
+		SettingsLoader sl=new SettingsLoader("config");
+		
+		WeatherManager wm=new WeatherManager(sl.getAPIKey(), sl.getLat(), sl.getLon());
+		wm.getWeather();
+	}
+	
+	public WeatherContainer getWeather() throws NoRouteToHostException, IOException, InterruptedException, ParseException {
 		if(apiKey==null) {
 			System.err.println(new Date()+": No API Key provided, skipping weather fetch.");
 			throw new NoRouteToHostException("No API key provided");
 		}
-
-		ArrayList<Hashtable<String, String>> weatherDay, weatherHour;
-		weatherDay=new ArrayList<Hashtable<String, String>>();
-		weatherHour=new ArrayList<Hashtable<String, String>>();
-
-		String weatherSummary;
-
-		//ForecastIO.getTimezone() occasionally throws an unhandled null pointer exception
-		//This code block checks for the exception and retries creation of the ForecastIO object
-		//Only retries MAX_ERROR_COUNT times to prevent excessive looping
-		boolean isError=true;
-		int errCount=0;
-		ForecastIO fio=null;
-		while(isError) {
-			isError=false;
-			fio=new ForecastIO(apiKey);
-			fio.getForecast(lat, lon);
-			try {
-				fio.getTimezone();
-			}catch(NullPointerException e) {
-//				System.err.println(new Date()+": Error in weather timezone");
-//				e1.printStackTrace();
-				isError=true;
-				errCount++;
-			}
-			if(errCount>MAX_ERROR_COUNT) {
-				System.err.println(new Date()+": NullPointerException encountered "+errCount+" times. Breaking loop");
-				break;
-			}
-		}
-
-		if(isError) {
-			System.err.println(new Date()+": Skipped weather due to error in weather timezone");
-			return null;
-		}
-
-		//Daily Forecast
-		if(fio.hasDaily()) {
-			FIODaily daily=new FIODaily(fio);
-			if(daily.days()<MainController.NUM_DAILY_WEATHER) {
-				//Forecast Error
-				weatherDay=null;
-				System.err.println(new Date()+": Error in daily forecast, only "+daily.days()+" days");
-			}else {
-				for(int j=0; j<MainController.NUM_DAILY_WEATHER; j++) {
-					Hashtable<String, String> temp=new Hashtable<String, String>();
-					String[] h=daily.getDay(j).getFieldsArray();
-					for(int i=0; i<h.length; i++) {
-						temp.put(h[i], daily.getDay(j).getByKey(h[i]));
-					}
-					weatherDay.add(j, temp);
-				}
-			}
-		}else {
-			System.err.println(new Date()+": Daily forecast not available");
-		}
-
-		//Hourly Forecast
-		if(fio.hasHourly()) {
-			FIOHourly hourly=new FIOHourly(fio);
-			if(hourly.hours()<MainController.NUM_HOURLY_WEATHER) {
-				//Forecast Error
-				weatherHour=null;
-				System.out.println(new Date()+": Error in hourly forecast, only "+hourly.hours()+" hours");
-			}else {
-				for(int j=0; j<MainController.NUM_HOURLY_WEATHER; j++) {
-					Hashtable<String, String> temp=new Hashtable<String, String>();
-					String[] h=hourly.getHour(j).getFieldsArray();
-					for(int i=0; i<h.length; i++) {
-						temp.put(h[i], hourly.getHour(j).getByKey(h[i]));
-					}
-					weatherHour.add(j, temp);
-				}
-			}
-		}else {
-			System.err.println(new Date()+": Hourly forecast not available");
-		}
-
-		//Whole system to extract the overall hourly summary
-		String s="";
-		try {
-			ForecastIO fio2=new ForecastIO(apiKey);
-			fio2.setExcludeURL("minutely,daily,currently");
-
-			URL url=new URL(fio2.getUrl(lat, lon));
-			HttpURLConnection con=(HttpURLConnection) url.openConnection();
-			con.setRequestMethod("GET");
-			BufferedReader in=new BufferedReader(new InputStreamReader(con.getInputStream()));
-			String inputLine;
-			StringBuffer content=new StringBuffer();
-			while((inputLine=in.readLine())!=null) {
-				content.append(inputLine);
-			}
-			in.close();
-			int start=content.indexOf("summary")+"summary".length()+3;
-			if(start!=-1) {
-				s=content.substring(start);
-				int end=s.indexOf('"')-1;
-				s=s.substring(0, end);
-			}else {
-				System.err.println(new Date()+": Summary not contained in custom forecast fetch");
-			}
-		}catch(IOException e) {
-			System.err.println(new Date()+": Failed to fetch overall hourly summary");
-			e.printStackTrace();
-		}
-		weatherSummary=s;
-
+		HttpRequest request = HttpRequest.newBuilder()
+				.uri(buildURI())
+				.method("GET", HttpRequest.BodyPublishers.noBody()).build();
+		HttpResponse<String> response = HttpClient.newHttpClient()
+				.send(request, HttpResponse.BodyHandlers.ofString());
+		
+		JSONObject json=new JSONObject(response.body());
+		
 		WeatherContainer wc=new WeatherContainer();
+		
+		wc.addSummary(json.getJSONArray("days").getJSONObject(0).getString("description"));
+		
 		//Load daily weather into WC
-		for(int i=0; i<weatherDay.size(); i++) {
-			Hashtable<String, String> ht=weatherDay.get(i);
-			String dayName=getDayName(i);
-			String icon=ht.get("icon");
-			icon=icon.substring(1, icon.length()-1);
+		JSONArray values=json.getJSONArray("days");
+		for(int i=0; i<MainController.NUM_DAILY_WEATHER; i++) {
+			JSONObject dayValues=values.getJSONObject(i);
+			
+			String date=dayValues.getString("datetime");
+			String dayName=getDayName(date);
+			
+			String icon=dayValues.getString("icon");
 			File dayIcon=iconLoader.getIcon(icon);
-			String dayHigh=ht.get("apparentTemperatureHigh");
-			String dayLow=ht.get("apparentTemperatureLow");
-			wc.addDay(dayName, dayIcon, roundTemp(dayHigh), roundTemp(dayLow));
+			
+			Double dayHighDouble=dayValues.getDouble("feelslikemax");
+			String dayHigh=Math.round(dayHighDouble)+"";
+			
+			Double dayLowDouble=dayValues.getDouble("feelslikemin");
+			String dayLow=Math.round(dayLowDouble)+"";
+			
+			wc.addDay(dayName, dayIcon, dayHigh, dayLow);
 		}
-
-		//Load hourly into WC
-		for(int i=0; i<weatherHour.size(); i++) {
-			Hashtable<String, String> ht=weatherHour.get(i);
-			String hourTime=null;
-			try {
-				String timeGMT=ht.get("time")+" "+"GMT";
-				SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy HH:mm:ss z");
-				TimeZone tz=TimeZone.getDefault();
-				sdf.setTimeZone(tz);
-				Date date=null;
-				date=sdf.parse(timeGMT);
-				sdf=new SimpleDateFormat("h a");
-				hourTime=sdf.format(date);
-			}catch(ParseException e) {
-				//Failed to parse time
-				hourTime="";
-			}
-			String icon=ht.get("icon");
-			icon=icon.substring(1, icon.length()-1);
+		
+		values=values.getJSONObject(0).getJSONArray("hours");
+		SimpleDateFormat sdf=new SimpleDateFormat("H");
+		Date d=new Date();
+		int startHour=Integer.parseInt(sdf.format(d));
+		for(int i=startHour; i<MainController.NUM_HOURLY_WEATHER+startHour; i++) {
+			//FIXME day rolled over
+			if(i>23)break;
+			JSONObject hourValues=values.getJSONObject(i);
+			
+			String time=hourValues.getString("datetime");
+			sdf=new SimpleDateFormat("HH:mm:ss");
+			Calendar c=Calendar.getInstance();
+			c.setTime(sdf.parse(time));
+			sdf=new SimpleDateFormat("h a");
+			String hourTime=sdf.format(c.getTime());
+			
+			String icon=hourValues.getString("icon");
 			File hourIcon=iconLoader.getIcon(icon);
-			String hourTemp=ht.get("apparentTemperature");
-			String hourSumm=ht.get("summary");
-			hourSumm=hourSumm.substring(1, hourSumm.length()-1);
-			wc.addHour(hourTime, hourIcon, roundTemp(hourTemp), hourSumm);
+			
+			Double hourTempDouble=hourValues.getDouble("feelslike");
+			String hourTemp=Math.round(hourTempDouble)+"";
+			
+			//TODO determine if this tag is the best analog to Dark Sky
+			String hourSumm=hourValues.getString("conditions");
+			
+			
+			wc.addHour(hourTime, hourIcon, hourTemp, hourSumm);
 		}
-
-		wc.addSummary(weatherSummary);
 
 		return wc;
 	}
-
-	private static String roundTemp(String temp) {
-		Float f=Float.parseFloat(temp);
-		return Math.round(f)+"";
-	}
-
-	private static String getDayName(int i) {
-		int today=Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
-		int dayNum=(today-1+i)%7;
-		String day=namesOfDays[dayNum+1];
+	
+	//TODO javadoc javadoc javadoc javadoc
+	private static String getDayName(String date) throws ParseException {
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+		Calendar c=Calendar.getInstance();
+		c.setTime(sdf.parse(date));
+		int dayNum=c.get(Calendar.DAY_OF_WEEK);
+		String day=namesOfDays[dayNum];
 		return day;
+	}
+	
+	private URI buildURI() {
+		//Build request, adding dynamic data as needed
+		StringBuilder s=new StringBuilder();
+		s.append("https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/");
+		s.append(lat+"%2C"+lon);
+		s.append("/");
+		s.append(dateBuilder());
+		s.append("?unitGroup=us&elements=datetime%2Cfeelslikemax%2Cfeelslikemin%2Cfeelslike%2Cconditions%2Cdescription%2Cicon&include=days%2Chours&key=");
+		s.append(apiKey);
+		s.append("&contentType=json");
+		
+		//Create URI
+		URI uri=URI.create(s.toString());
+
+		return uri;
+	}
+	
+	/**
+	 * Builds a properly formatted string for use in the Visual Crossing API.
+	 * Gives a 3 day range starting today.
+	 * @return Current Date / 2 Days From Now
+	 */
+	private static String dateBuilder() {
+		//Format the start date (today)
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+		Date d=new Date();
+		String dateStart=sdf.format(d);
+		
+		//Add 2 days and format
+		Calendar c=Calendar.getInstance();
+		c.setTime(d);
+		c.add(Calendar.DATE, 2);
+		String dateEnd=sdf.format(c.getTime());
+
+		return dateStart+"/"+dateEnd;
 	}
 
 }
