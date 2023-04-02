@@ -1,6 +1,8 @@
 package com.voidStudios.photoDisplay;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
@@ -82,7 +84,7 @@ public class Controller {
 					WeatherContainer wc=weatherManager.getWeather();
 					if(wc!=null)
 						mainController.setWeather(wc);
-				}catch(Exception e) {	//TODO make this specific
+				}catch(IllegalArgumentException|ParseException|IOException|InterruptedException e) {
 					mainController.hideWeather();
 				}
 			}

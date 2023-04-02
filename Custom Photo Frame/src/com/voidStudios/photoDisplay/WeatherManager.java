@@ -2,7 +2,6 @@ package com.voidStudios.photoDisplay;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.NoRouteToHostException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -32,29 +31,37 @@ public class WeatherManager {
 		iconLoader=new IconLoader();
 	}
 	
-	//TODOL delete once testing is done
-	public static void main(String[] args) throws Exception {
-		System.out.println(new Date()+": Initializing JFX Photo Frame.");
-		
-		SettingsLoader sl=new SettingsLoader("config");
-		
-		WeatherManager wm=new WeatherManager(sl.getAPIKey(), sl.getLat(), sl.getLon());
-		wm.getWeather();
-	}
-	
-	public WeatherContainer getWeather() throws NoRouteToHostException, IOException, InterruptedException, ParseException {
+	/**
+	 * Makes required call to Visual Crossing for weather data and processes the reply.
+	 * Returns a WeatherContainer.
+	 * 
+	 * @return WeatherContainer containing weather information
+	 * @throws IllegalArgumentException No API key provided
+	 * @throws ParseException Failed to parse a datetime in response
+	 * @throws IOException Failed to register response from Visual Crossing
+	 * @throws InterruptedException Failed to register response from Visual Crossing
+	 */
+	public WeatherContainer getWeather() throws IllegalArgumentException, ParseException, IOException, InterruptedException {
 		if(apiKey==null) {
 			System.err.println(new Date()+": No API Key provided, skipping weather fetch.");
-			throw new NoRouteToHostException("No API key provided");
+			throw new IllegalArgumentException("No API key provided");
 		}
+		
+		//Java request syntax from Visual Crossing docs
 		HttpRequest request = HttpRequest.newBuilder()
 				.uri(buildURI())
 				.method("GET", HttpRequest.BodyPublishers.noBody()).build();
-		HttpResponse<String> response = HttpClient.newHttpClient()
-				.send(request, HttpResponse.BodyHandlers.ofString());
+		HttpResponse<String> response= null;
+				
+		try {
+			response=HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+		}catch(IOException|InterruptedException e) {
+			System.err.println(new Date()+": ERROR: HTTP request to Visual Crossing failed.");
+			throw e;
+		}
 		
+		//Process request into a JSONObject
 		JSONObject json=new JSONObject(response.body());
-		
 		WeatherContainer wc=new WeatherContainer();
 		
 		String summary=json.getString("description");
@@ -68,7 +75,14 @@ public class WeatherManager {
 			JSONObject dayValues=values.getJSONObject(i);
 			
 			String date=dayValues.getString("datetime");
-			String dayName=getDayName(date);
+			String dayName;
+			try {
+				dayName=getDayName(date);
+			}catch(ParseException e) {
+				System.err.println(new Date()+": Failed to parse datetime for day "+i+". datetime: "+date);
+				e.printStackTrace();
+				throw e;
+			}
 			
 			String icon=dayValues.getString("icon");
 			File dayIcon=iconLoader.getIcon(icon);
@@ -95,7 +109,13 @@ public class WeatherManager {
 			String time=hourValues.getString("datetime");
 			sdf=new SimpleDateFormat("HH:mm:ss");
 			Calendar c=Calendar.getInstance();
-			c.setTime(sdf.parse(time));
+			try {
+				c.setTime(sdf.parse(time));
+			}catch(ParseException e) {
+				System.err.println(new Date()+": Failed to parse datetime for hour "+i+". datetime: "+time);
+				e.printStackTrace();
+				throw e;
+			}
 			sdf=new SimpleDateFormat("h a");
 			String hourTime=sdf.format(c.getTime());
 			
@@ -115,7 +135,12 @@ public class WeatherManager {
 		return wc;
 	}
 	
-	//TODO javadoc javadoc javadoc javadoc
+	/**
+	 * Gives the named day of the week for a given date.
+	 * @param date Date string in the yyyy-MM-dd format
+	 * @return String containing the abbreviated day of the week
+	 * @throws ParseException Couldn't parse date properly
+	 */
 	private static String getDayName(String date) throws ParseException {
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
 		Calendar c=Calendar.getInstance();
@@ -125,6 +150,12 @@ public class WeatherManager {
 		return day;
 	}
 	
+	/**
+	 * Builds the request URL for fetching weather.
+	 * Adds location and API as needed. Converts URL to a URI object.
+	 * 
+	 * @return URI for weather request
+	 */
 	private URI buildURI() {
 		//Build request, adding dynamic data as needed
 		StringBuilder s=new StringBuilder();
@@ -132,7 +163,6 @@ public class WeatherManager {
 		s.append(lat+"%2C"+lon);
 		s.append("/");
 		s.append(dateBuilder());
-//		s.append("?unitGroup=us&elements=datetime%2Cfeelslikemax%2Cfeelslikemin%2Cfeelslike%2Cconditions%2Cdescription%2Cicon&include=days%2Chours&key=");
 		s.append("?unitGroup=us&elements=datetime%2CdatetimeEpoch%2Cfeelslikemax%2Cfeelslikemin%2Cfeelslike%2Cconditions%2Cdescription"
 				+ "%2Cicon&include=events%2Ccurrent%2Cdays%2Calerts%2Chours%2Cfcst&key=");
 		s.append(apiKey);
@@ -147,7 +177,8 @@ public class WeatherManager {
 	/**
 	 * Builds a properly formatted string for use in the Visual Crossing API.
 	 * Gives a 3 day range starting today.
-	 * @return Current Date / 2 Days From Now
+	 * 
+	 * @return <Current Date> / <Date 2 Days From Now>
 	 */
 	private static String dateBuilder() {
 		//Format the start date (today)
