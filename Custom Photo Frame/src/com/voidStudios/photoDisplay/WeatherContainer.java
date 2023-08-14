@@ -19,6 +19,8 @@ public class WeatherContainer {
 	String summary;
 
 	public WeatherContainer() {
+		//FIXME daily weather static used for hourly
+		//also probably initialize the numDays numHours to be more clear
 		int numDays=MainController.NUM_DAILY_WEATHER;
 		dayName=new ArrayList<String>(numDays);
 		dayIcon=new ArrayList<File>(numDays);

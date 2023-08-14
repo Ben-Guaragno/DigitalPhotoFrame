@@ -85,6 +85,8 @@ public class Controller {
 					if(wc!=null)
 						mainController.setWeather(wc);
 				}catch(IllegalArgumentException|ParseException|IOException|InterruptedException e) {
+					//TODO JSONException seems to get through
+					//probably catch that
 					mainController.hideWeather();
 				}
 			}
