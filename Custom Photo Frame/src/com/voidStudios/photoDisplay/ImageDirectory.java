@@ -99,7 +99,7 @@ public class ImageDirectory {
 			//Pause file removed, resume
 			controller.start();
 		}else if(!isPaused && pause) {
-			//Pause file creates, pause
+			//Pause file created, pause
 			controller.pause();
 		}else {
 			//No Action

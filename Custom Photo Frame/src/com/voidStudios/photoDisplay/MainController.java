@@ -158,6 +158,7 @@ public class MainController {
 	}
 
 	private void setHourWeather(int i, WeatherContainer wc) {
+		//TODOL add some documentation for this math mess
 		ObservableList<Node> hourlyList=hourlyGrid.getChildrenUnmodifiable();
 		Label lTime=(Label) hourlyList.get(i*3);
 		ImageView iv=(ImageView) hourlyList.get(i*3+1);

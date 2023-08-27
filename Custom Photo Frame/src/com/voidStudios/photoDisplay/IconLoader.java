@@ -12,6 +12,8 @@ public class IconLoader {
 		load();
 	}
 
+	//TODOL Switch to more comprehensive icon set
+	//Visual Crossing can provide more icon types than below
 	private void load() {
 		File fog=new File("./Icons/Cloud-Fog.png");
 		File sleet=new File("./Icons/Cloud-Hail.png");

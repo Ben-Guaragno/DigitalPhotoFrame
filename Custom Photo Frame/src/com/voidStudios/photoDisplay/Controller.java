@@ -1,16 +1,19 @@
 package com.voidStudios.photoDisplay;
 
 import java.io.File;
-import java.net.NoRouteToHostException;
+import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.json.JSONException;
+
 public class Controller {
 
-	private static final int ONE_HOUR_MILLIS=3600000;
-	private static final int OFFSET_FROM_HOUR=5000;
+	private static final int ONE_HOUR_MILLIS=1000*60*60;
+	private static final int OFFSET_FROM_HOUR=5000;	//5 seconds in milliseconds
 	private Timer timer;
 	private SimpleDateFormat dateFormat;
 	private MainController mainController;
@@ -53,7 +56,7 @@ public class Controller {
 	}
 
 	public void start() {
-		//Ensures the multiple timers cannot be started
+		//Ensures that multiple timers cannot be started
 		if(timer!=null)
 			pause();
 
@@ -83,7 +86,9 @@ public class Controller {
 					WeatherContainer wc=weatherManager.getWeather();
 					if(wc!=null)
 						mainController.setWeather(wc);
-				}catch(NoRouteToHostException e) {
+				}catch(IllegalArgumentException|ParseException|IOException|InterruptedException|JSONException e) {
+					System.err.println(new Date()+": WARNING: Exception "+e.getClass().getName()+"recieved. Hiding weather. Exception details to follow:");
+					System.err.println(e.toString());
 					mainController.hideWeather();
 				}
 			}
