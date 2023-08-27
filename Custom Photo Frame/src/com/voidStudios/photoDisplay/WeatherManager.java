@@ -194,7 +194,7 @@ public class WeatherManager {
 	}
 	
 	/**
-	 * Builds a properly formatted string for use in the Visual Crossing API.
+	 * Builds a properly formatted date range string for use in the Visual Crossing API.
 	 * Gives a 3 day range starting today.
 	 * 
 	 * @return <Current Date> / <Date 2 Days From Now>
