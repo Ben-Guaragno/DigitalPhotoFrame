@@ -14,22 +14,25 @@ public class WeatherContainer {
 	private ArrayList<File> hourIcon;
 	private ArrayList<String> hourTemp;
 	private ArrayList<String> hourSumm;
-	int numDays;
-	int numHours;
-	String summary;
+	private int numDays;
+	private int numHours;
+	private String summary;
 
 	public WeatherContainer() {
-		//FIXME daily weather static used for hourly
-		//also probably initialize the numDays numHours to be more clear
-		int numDays=MainController.NUM_DAILY_WEATHER;
-		dayName=new ArrayList<String>(numDays);
-		dayIcon=new ArrayList<File>(numDays);
-		dayHigh=new ArrayList<String>(numDays);
-		dayLow=new ArrayList<String>(numDays);
-		hourTime=new ArrayList<String>(numDays);
-		hourIcon=new ArrayList<File>(numDays);
-		hourTemp=new ArrayList<String>(numDays);
-		hourSumm=new ArrayList<String>(numDays);
+		int maxDays=MainController.NUM_DAILY_WEATHER;
+		dayName=new ArrayList<String>(maxDays);
+		dayIcon=new ArrayList<File>(maxDays);
+		dayHigh=new ArrayList<String>(maxDays);
+		dayLow=new ArrayList<String>(maxDays);
+		
+		int maxHours=MainController.NUM_HOURLY_WEATHER;
+		hourTime=new ArrayList<String>(maxHours);
+		hourIcon=new ArrayList<File>(maxHours);
+		hourTemp=new ArrayList<String>(maxHours);
+		hourSumm=new ArrayList<String>(maxHours);
+		
+		numDays=0;
+		numHours=0;
 	}
 
 	public void addDay(String dayName, File dayIcon, String dayHigh, String dayLow) {
