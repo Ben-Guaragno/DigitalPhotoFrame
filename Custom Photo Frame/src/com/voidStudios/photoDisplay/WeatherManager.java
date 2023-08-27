@@ -13,6 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class WeatherManager {
@@ -40,8 +41,9 @@ public class WeatherManager {
 	 * @throws ParseException Failed to parse a datetime in response
 	 * @throws IOException Failed to register response from Visual Crossing
 	 * @throws InterruptedException Failed to register response from Visual Crossing
+	 * @throws JSONException Response from Visual Crossing not valid JSON
 	 */
-	public WeatherContainer getWeather() throws IllegalArgumentException, ParseException, IOException, InterruptedException {
+	public WeatherContainer getWeather() throws IllegalArgumentException, ParseException, IOException, InterruptedException, JSONException {
 		if(apiKey==null) {
 			System.err.println(new Date()+": No API Key provided, skipping weather fetch.");
 			throw new IllegalArgumentException("No API key provided");
@@ -60,7 +62,17 @@ public class WeatherManager {
 		}
 		
 		//Process request into a JSONObject
-		JSONObject json=new JSONObject(response.body());
+		JSONObject json=null;
+		try {
+			json=new JSONObject(response.body());
+		}catch(JSONException e) {
+			System.err.println(new Date()+": ERROR: JSON response from Visual Crossing not valid");
+			e.printStackTrace();
+			System.err.println(new Date()+": Full response body to follow:");
+			System.err.println(response.body());
+			System.err.println(new Date()+": Response body concluded. Re-throwing exception.");
+			throw e;
+		}
 		
 		WeatherContainer wc=new WeatherContainer();
 		
